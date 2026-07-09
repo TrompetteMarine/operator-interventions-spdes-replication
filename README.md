@@ -42,10 +42,24 @@ pdflatex paper_merged && bibtex paper_merged && pdflatex paper_merged && pdflate
 pdflatex -jobname=paper_submission "\def\SUBMISSIONCLEAN{}\input{paper_merged}"
 ```
 
-## Reproduce the numerics
+## Reproduce the numerics 
+
+first, create a python venv e.g. , by running something like :
 
 ```bash
-pip install -e .[dev]
+python3 -m venv .venv
+source .venv/bin/activate
+```
+Ensure pytest is installed properly by running :
+
+```bash
+pip install pytest
+```
+
+Then, install the replication package 
+
+```bash
+pip install -e .[dev]    # if it doesn't land properly, just run `pip install -e .`
 make verify              # unit tests: exact identities, formula parity
 make reproduce-standard  # medium Monte Carlo profile (seeded)
 make reproduce-paper     # full validation pipeline -> paper figures
