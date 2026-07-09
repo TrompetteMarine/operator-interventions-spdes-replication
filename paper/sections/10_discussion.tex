@@ -1,0 +1,25 @@
+\section{Discussion}
+
+The paper places a narrow causal object on a complete mathematical and inferential footing. The intervention is an operator-module replacement inside a declared linear Gaussian SPDE class. The target is a counterfactual field-functional distribution. Identification is target specific. The inferential limit is mixed rate. Numerical approximation must be controlled at the target family's root-information scale.
+
+Three distinctions are particularly important.
+
+First, semantics and identification are separate. \Cref{sec:semantics} provides a coherent shared-noise intervention even before one asks whether the resulting law is recoverable from factual data; \Cref{sec:identification,sec:nonid} then characterise the positive and negative identification results.
+
+Second, strong field approximation and Gaussian law approximation need not have the same rate. Under non-degeneracy, the variance tail enters normal CDF, quantile, and optimal Wasserstein comparisons linearly. Using the common-noise strong rate for every law target can be unnecessarily conservative.
+
+Third, the phrase ``causal SPDE'' should not be read as unrestricted causal discovery. The intervention and invariant modules must be supplied. The feedback-gauge and open-loop constructions show that passive equality of factual laws cannot decide which part of a drift is the module that should be replaced.
+
+Several extensions remain. Non-diagonal unbounded perturbations, including spatially varying divergence-form coefficients, require domain-sensitive perturbation theory. Semilinear equations require differentiability of nonlinear solution maps. Non-Gaussian noise calls for characteristic-function, Wasserstein, or quantile-specific methods rather than Gaussian mean--variance reduction. Physical-space observations require a separate statistical experiment and may produce different rates.
+
+The present results are nevertheless sufficient for a coherent paper-level conclusion:
+\begin{equation*}
+\begin{aligned}
+&\text{specified structural intervention}
++\text{identified factual experiment}\\
+&\quad+\text{controlled numerical approximation}\\
+&\hspace{2.5cm}\Longrightarrow
+\text{uniformly inferable counterfactual laws}.
+\end{aligned}
+\end{equation*}
+The impossibility results define the boundary of that conclusion rather than an exception to it.

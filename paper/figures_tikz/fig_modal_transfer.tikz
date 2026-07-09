@@ -1,0 +1,43 @@
+% Modal decay under intervention and the transfer kernel g_{a,k,w}.
+% Left: e^{-a lambda_k t} for factual theta vs intervened a on two modes.
+% Right: the backward transfer kernel s -> g_{a,k,w}(s) for w_k = 1.
+\begin{tikzpicture}[font=\small, scale=1.0,
+  ax/.style={-{Stealth[length=2.2mm]}, thick},
+  lbl/.style={font=\footnotesize\itshape, text=black!70}]
+% ---------------- left panel: modal decay ----------------
+\begin{scope}
+\draw[ax] (0,0) -- (4.4,0) node[below left=1pt]{$t$};
+\draw[ax] (0,0) -- (0,3.1);
+\node[anchor=south, rotate=90] at (-.55,1.4) {$e^{-a\lambda_k t}$};
+\draw (0.03,2.6) node[left, font=\scriptsize]{$1$} -- (-0.07,2.6);
+% mode k=1: lambda=1 scaled; factual theta=0.7 -> rate .7; intervened a=1.4
+\draw[thick, blue!60!black]  plot[domain=0:4, samples=60] (\x,{2.6*exp(-0.55*\x)});
+\draw[thick, red!60!black, dashed] plot[domain=0:4, samples=60] (\x,{2.6*exp(-1.1*\x)});
+% mode k=2: lambda 4x
+\draw[thin, blue!60!black]  plot[domain=0:4, samples=60] (\x,{2.6*exp(-2.2*\x)});
+\draw[thin, red!60!black, dashed] plot[domain=0:4, samples=60] (\x,{2.6*exp(-4.4*\x)});
+\node[lbl, blue!60!black]  at (3.05,1.15) {factual $\theta$};
+\node[lbl, red!60!black]   at (2.95,0.33) {intervened $\tilde a=2\theta$};
+\node[lbl] at (2.2,-0.42) {mode $k=1$ (thick), $k=2$ (thin): $\lambda_2=4\lambda_1$};
+\end{scope}
+% ---------------- right panel: transfer kernel ----------------
+\begin{scope}[xshift=7.1cm]
+\draw[ax] (0,0) -- (4.4,0) node[below left=1pt]{$s$};
+\draw[ax] (0,0) -- (0,3.1);
+\node[anchor=south, rotate=90] at (-.55,1.4) {$g_{a,k,w}(s)$};
+\draw (4.0,0.05) -- (4.0,-0.05) node[below, font=\scriptsize]{$T$};
+% g(s) = (1 - e^{-a lambda (T-s)})/(a lambda) for w=1; a*lambda = .55 resp 1.1 (k=1)
+\draw[thick, blue!60!black] plot[domain=0:4, samples=60]
+  (\x,{2.6*(1-exp(-0.55*(4-\x)))/(0.55*4)*2.2});
+\draw[thick, red!60!black, dashed] plot[domain=0:4, samples=60]
+  (\x,{2.6*(1-exp(-1.1*(4-\x)))/(1.1*4)*2.2});
+\node[lbl, align=left, anchor=west] at (1.45,2.85)
+  {$g_{a,k,w}(s)=\int_s^T w_k(t)e^{-a\lambda_k(t-s)}\,dt$\\[1pt]
+   here $w_k\equiv1$: $g=\frac{1-e^{-a\lambda_k(T-s)}}{a\lambda_k}$};
+\node[lbl, blue!60!black] at (1.15,1.28) {$a=\theta$};
+\node[lbl, red!60!black]  at (1.28,0.44) {$a=\tilde a$};
+\node[lbl, align=center] at (2.2,-0.42)
+  {$V_a(w)=\sum_kq_k^2\!\int_0^T\!g_{a,k,w}^2$: intervention lowers the\\
+   load of every innovation, monotonically in $a$};
+\end{scope}
+\end{tikzpicture}

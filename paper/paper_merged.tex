@@ -1,0 +1,197 @@
+% ======================================================================
+% paper_merged.tex — single-document SPDE-AC-shaped working paper
+% (BENCHMARK_ANALYSIS.md §5 blueprint: statements first, one proofs
+% section containing parts S0–S8 with the v2 closures, applications and
+% numerics after the proofs, numeric bibliography.)
+% Build: python3 build_supplement.py
+%        pdflatex paper_merged && bibtex paper_merged && pdflatex x2
+% ======================================================================
+\documentclass[10pt]{article}
+\newcommand{\MERGEDDOC}{}          % toggles merged-aware wording in sections/
+\usepackage[a4paper,margin=0.9in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{booktabs,tabularx,array,longtable}
+\usepackage{graphicx}
+\usepackage[font=small]{caption}
+\usepackage{subcaption}
+\usepackage{xcolor,float}
+\usepackage{enumitem}
+\usepackage[numbers,sort&compress]{natbib}
+\setlength{\bibsep}{2.5pt}
+\renewcommand{\bibfont}{\small}
+\usepackage{pifont}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,fit,backgrounds,matrix,shapes.misc,decorations.pathreplacing}
+\graphicspath{{figures/}{wp_figures/}}
+\usepackage{hyperref}
+\usepackage[capitalise]{cleveref}
+\hypersetup{colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black}
+
+% compact spacing (submission-length calibration)
+\AtBeginDocument{%
+ \setlength{\abovedisplayskip}{5pt plus 1pt minus 2pt}%
+ \setlength{\belowdisplayskip}{5pt plus 1pt minus 2pt}%
+ \setlength{\abovedisplayshortskip}{2pt plus 1pt}%
+ \setlength{\belowdisplayshortskip}{3pt plus 1pt}%
+ \setlength{\textfloatsep}{11pt plus 2pt minus 2pt}%
+ \setlength{\abovecaptionskip}{5pt}}
+\setlist{itemsep=1pt, topsep=3pt, parsep=0pt}
+\makeatletter
+\def\thm@space@setup{\thm@preskip=6pt \thm@postskip=6pt}
+\makeatother
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{14pt plus 3pt minus 3pt}{7pt plus 2pt}
+\titlespacing*{\subsection}{0pt}{11pt plus 3pt minus 2pt}{5pt plus 2pt}
+\titlespacing*{\subsubsection}{0pt}{9pt plus 2pt minus 2pt}{4pt plus 1pt}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{example}{Example}[section]
+\crefname{assumption}{Assumption}{Assumptions}
+\Crefname{assumption}{Assumption}{Assumptions}
+
+% ---- main-text macros ----
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Pp}{\mathbb P}
+\newcommand{\Law}{\mathcal L}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cM}{\mathfrak M}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\doop}{\operatorname{do}}
+\newcommand{\op}{o_{\Pp}}
+\newcommand{\Op}{O_{\Pp}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\inner}[2]{\left\langle#1,#2\right\rangle}
+\newcommand{\cf}{\mathrm{cf}}
+\newcommand{\fact}{\mathrm{fact}}
+\newcommand{\inwords}[1]{\par\smallskip\noindent\textit{Interpretation.} #1\par\smallskip}
+\newcommand{\yes}{\textcolor{green!55!black}{\ding{51}}}
+\newcommand{\no}{\textcolor{red!70!black}{\ding{55}}}
+\newcommand{\half}{\textcolor{orange!85!black}{$\displaystyle\sim$}}
+
+% ---- fallbacks for the proofs parts (parts re-define group-locally) ----
+\providecommand{\LamN}{\Lambda_N}
+\providecommand{\An}{A_{N,n}}
+\providecommand{\Dn}{D_{N,n}}
+\providecommand{\Dmat}{D_{N,n}}
+\providecommand{\vart}{\vartheta}
+\providecommand{\vzero}{\vartheta_0}
+\providecommand{\vhat}{\widehat\vartheta_{N,n}}
+\providecommand{\elln}{\ell_{N,n}}
+\providecommand{\an}{a_{N,n}}
+\providecommand{\bn}{b_{N,n}}
+\providecommand{\cC}{\mathcal C}
+\providecommand{\cG}{\mathcal G}
+\providecommand{\cU}{\mathcal U}
+\providecommand{\Jhat}{\widehat J_{N,n}}
+\providecommand{\1}{\mathbf 1}
+
+% Draft build: visible verification flags. Submission build: compile with
+%   pdflatex "\def\SUBMISSIONCLEAN{}\input{paper_merged}"
+% which silences the flags (status tracked in CHANGES_v2.md).
+\ifdefined\SUBMISSIONCLEAN
+\newcommand{\closuredraft}{}
+\else
+\newcommand{\closuredraft}{\par\smallskip\noindent
+\textcolor{blue!55!black}{\footnotesize\textbf{[Verification
+pending.]}}\par\smallskip}
+\fi
+
+\title{\textbf{Operator Interventions in Linear SPDEs:\\
+Galerkin Structural Semantics, Mixed-Rate Local Asymptotic Normality,\\
+and Uniform Inference for Post-Intervention Laws}}
+\author{Gabriel Lucas St\'ephane Bontemps\thanks{Email:
+\texttt{[address]}. ORCID: \texttt{[id]}.}\\[2pt]
+{\normalsize GREDEG--CNRS, Universit\'e C\^ote d'Azur, Nice, France}\\
+{\normalsize Adaptive Decision Lab, University of Oxford, Oxford, United Kingdom}}
+\date{\ifdefined\SUBMISSIONCLEAN July 2026\else Working paper v4 (proto-submission draft), July 2026\fi}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We develop a causal-statistical theory for operator interventions in linear parabolic stochastic partial differential equations. The intervention replaces the generator coefficient while preserving the initial condition, noise spectrum, scale, observation mechanism, and primitive Wiener process. We first prove that the post-intervention SPDE is the infinite-dimensional limit of intervened Galerkin structural causal models driven by common exogenous Brownian segments. For Gaussian field functionals we give explicit post-intervention laws and necessary-and-sufficient target-identification criteria. Under exact discrete spectral observation, the likelihood is regular but anisotropic: the drift parameter is learned at rate $\sqrt{\sum_{k\le N}\lambda_k}$, whereas the noise scale is learned at rate $\sqrt{Nn}$. We establish local asymptotic normality, efficient estimation, uniform counterfactual CDF, quantile, tail, and distributional-effect processes, and feasible simultaneous confidence bands based on modal-score multipliers. We derive Fr\'echet derivatives of the operator-to-law map, combine statistical, Galerkin, temporal, and bounded operator-approximation errors, and state rate conditions for full-field inference. Finally, we construct observationally equivalent mechanisms with different post-intervention laws when forcing, initial, sensing, or cross-world modules are left unrestricted. Complete proofs are contained in the paper; numerical experiments verify the mixed rates, simultaneous coverage, approximation slopes, operator sensitivities, and impossibility constructions.
+\end{abstract}
+
+\noindent\textbf{Keywords:} stochastic partial differential equations; operator intervention; spectral inference; local asymptotic normality; empirical processes; multiplier bootstrap; Galerkin approximation.\\
+\textbf{MSC2020:} 60H15; 62M05; 62F12; 62G15; 65M60.
+
+% ---------- statements ----------
+\input{sections/01_introduction}
+\input{sections/02_model}
+\input{sections/03_semantics}
+\input{sections/04_identification}
+\input{sections/05_lan}
+\input{sections/06_uniform_inference}
+\input{sections/07_sensitivity_error}
+\input{sections/08_nonidentification}
+
+% ---------- proofs ----------
+\clearpage
+\section{Proofs of the main results}\label{sec:proofs}
+
+This section proves every result of the paper. Part S0 first restates the
+external theorems we rely on as attributed local propositions, so that each
+later invocation is an internal reference with hypotheses verified at the
+point of use. Parts S1--S8 then follow the dependency order
+semantics $\to$ identification $\to$ likelihood $\to$ uniform processes
+$\to$ bootstrap $\to$ sensitivity $\to$ total error $\to$
+non-identification, beginning, as the finite-dimensional layer must, with
+the Galerkin approximation. A statement that re-proves a result already
+announced carries the mark ``establishes Theorem~$x.y$'' in its title; all
+other numbered statements are supporting lemmas. Notation is local to each
+part where it deviates from the main text. \Cref{fig:proofmap} displays
+the dependency structure.
+
+\begin{figure}[h]
+\centering
+\resizebox{.98\textwidth}{!}{\input{figures_tikz/fig_proof_architecture.tikz}}
+\caption{Dependency structure of the proofs. Solid arrows are proof-level dependencies; the dashed arrow is the bias-aware band construction feeding back from the total-error analysis into the inference machinery. Part tags list the main-text statements established in each part.}
+\label{fig:proofmap}
+\end{figure}
+
+\input{supplement_imports_merged}
+\input{supplement_parts_merged}
+
+% ---------- applications and numerics ----------
+\input{sections/09_numerics}
+\input{sections/10_discussion}
+
+\section*{Declarations}
+\paragraph{Funding.} This work was supported by a DS4H (Digital Systems
+for Humans) fellowship, Universit\'e C\^ote d'Azur.
+\paragraph{Competing interests.} The author declares no competing interests.
+\paragraph{Data and code availability.} All numerical results are generated
+by the seeded replication package (Python reference implementation with a
+Julia parity implementation, deterministic profiles, SHA-256 manifests, and
+continuous-integration checks) archived with the manuscript sources; the
+figures and tables of Section~\ref{sec:numerics} are reproduced end-to-end
+by the documented \texttt{make} targets. [Repository DOI to be added upon
+archival deposition.]
+\paragraph{Acknowledgements.} Grammarly and generative AI tools were used
+for proofreading, grammatical corrections, and targeted suggestions to
+enhance sentence clarity. After using these tools, all authors reviewed and
+edited the manuscript, taking full responsibility for its contents.
+
+\bibliographystyle{plainnat}
+\bibliography{references_merged}
+\end{document}

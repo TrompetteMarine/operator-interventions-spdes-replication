@@ -1,0 +1,32 @@
+{
+  "elapsed_seconds": 3.2881940299994312,
+  "python": "3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0]",
+  "platform": "Linux-4.4.0-x86_64-with-glibc2.41",
+  "numpy": "2.3.5",
+  "scipy": "1.17.0",
+  "pandas": "2.2.3",
+  "parameters": {
+    "adapted": {
+      "a0": 1.0,
+      "gamma": 0.5,
+      "a_tilde": 1.5,
+      "sigma": 0.6,
+      "T": 1.0
+    },
+    "exogenous": {
+      "a1": 0.5,
+      "a2": 1.5,
+      "a_tilde": 1.0,
+      "sigma": 0.3,
+      "target_factual_variance": 0.5
+    },
+    "calibration": {
+      "theta": 0.7,
+      "theta_tilde": 0.3,
+      "c1": 1.0,
+      "sigma1": 0.8,
+      "c2": 2.0,
+      "sigma2": 0.4
+    }
+  }
+}

@@ -1,0 +1,10 @@
+criterion,passed,diagnostic
+theorem_aligned_designs,True,0.1233700550136169
+at_least_1000_reps,True,1000.0
+standardised_sd_near_one,True,0.02187306572547243
+simultaneous_coverage_reported,True,7.0
+rate_slopes_checked,True,0.682205422018864
+operator_remainder_checked,True,4.674785650317132e-08
+failure_cases_demonstrated,True,0.7003341188263029
+planned_grid_audited,True,1.0
+one_command_runner,True,1.0

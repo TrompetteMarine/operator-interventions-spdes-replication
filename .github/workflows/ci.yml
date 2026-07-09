@@ -1,0 +1,22 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -e .[dev]
+      - run: PYTHONPATH=replication/python python -m pytest replication/python/tests -q
+      - run: PYTHONPATH=replication/python python replication/python/scripts/run_all.py preview
+  latex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build proofs section
+        run: cd paper && python3 build_supplement.py
+      - uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: paper
+          root_file: paper_merged.tex

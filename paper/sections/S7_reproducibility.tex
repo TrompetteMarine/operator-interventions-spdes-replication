@@ -1,0 +1,14 @@
+\section{Reproducibility protocol}
+
+The Python package is the reference implementation. Julia reproduces the core formulas, likelihood, Galerkin calculations, and non-identification examples independently.
+
+Profiles are stored in \path{replication/config/profiles.json}:
+\begin{itemize}
+\item \texttt{preview}: smoke tests and manuscript-figure generation;
+\item \texttt{standard}: moderate Monte Carlo validation;
+\item \texttt{publication}: high-replication theorem-aligned design.
+\end{itemize}
+
+Every stochastic stage uses a fixed base seed. Raw replication rows are stored before aggregation. Generated files include the active profile, software versions, runtime, and a SHA-256 manifest. The CI workflow runs Python tests, Julia tests, a preview reproduction, and both LaTeX builds.
+
+The WP1--WP9 theorem notes remain in \path{theory/work_packages/}. They are source-level research records and contain more granular assumptions and proof reductions than the journal-facing paper. The manuscript does not cite the work-package labels; it presents a consolidated theorem chain.

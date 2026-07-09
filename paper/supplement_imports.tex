@@ -1,0 +1,121 @@
+% ======================================================================
+% Part S0: Imported results — external theorems restated as attributed
+% local propositions (benchmark pattern: Addona et al., SPDE-AC 2026,
+% "Proposition 3.6 (Theorem 2.6 of [2] and Proposition 3 of [15])").
+% Every later invocation refers to these local statements, whose
+% hypotheses are verified at the point of use.
+% ======================================================================
+\clearpage
+\section{Imported results}\label{part:s0}
+
+Every external theorem used in Parts S1--S8 is restated here with
+attribution in the title and hypotheses in the statement. At each point of
+use, the text verifies the hypotheses explicitly; the pointers below record
+where.
+
+\begin{proposition}[Corollary 3.1 of \citealp{HallHeyde1980}; martingale
+array CLT]\label{imp:hh}
+For each $(N,n)$ let $\{\xi_i,\mathcal G_i\}_{i\le m}$ be a square-integrable
+martingale-difference array (indices ordered arbitrarily but fixed), and let
+$\eta^2\ge0$ be a \emph{constant}. If, as $N,n\to\infty$,
+(i) $\sum_i\E[\xi_i^2\mid\mathcal G_{i-1}]\overset{\Pp}{\to}\eta^2$, and
+(ii) the conditional Lindeberg condition holds
+($\sum_i\E[\xi_i^2\mathbf 1\{|\xi_i|>\epsilon\}\mid\mathcal G_{i-1}]
+\overset{\Pp}{\to}0$ for every $\epsilon>0$; implied by
+$\sum_i\E\xi_i^4\to0$), then $\sum_i\xi_i\Rightarrow\mathcal N(0,\eta^2)$.
+When the limit $\eta^2$ is random, the corollary additionally requires
+nested $\sigma$-fields and delivers stable convergence; the constant-limit
+version used here does not.
+\emph{Used in:} Part S3 (score central limit theorem, via Cram\'er--Wold)
+and Part S5 (conditional multiplier central limit theorem).
+\end{proposition}
+
+\begin{proposition}[Theorem 1.1 of \citealp{RudelsonVershynin2013};
+Hanson--Wright]\label{imp:hw}
+Let $X=(X_1,\ldots,X_m)$ have independent centred components with
+$\max_i\norm{X_i}_{\psi_2}\le K$, and let $A$ be a deterministic $m\times m$
+matrix. Then for every $t\ge0$,
+\[
+ \Pp\big(|X^\top AX-\E X^\top AX|>t\big)
+ \le2\exp\Big\{-c\min\Big(\frac{t^2}{K^4\norm A_F^2},\
+ \frac{t}{K^2\norm A_{\mathrm{op}}}\Big)\Big\}.
+\]
+\emph{Used in:} Part S3 (polynomial likelihood-ratio bound), where $X$ collects the
+standardised Gaussian innovations ($K$ an absolute constant) and $A$ is the
+deterministic quadratic-form matrix of the centred log-likelihood field.
+\end{proposition}
+
+\begin{proposition}[Theorem 3.9.4 of \citealp{vdVW1996}; functional delta
+method]\label{imp:delta}
+Let $\phi:\mathbb D_\phi\subseteq\mathbb D\to\mathbb E$ be Hadamard
+differentiable at $\theta$ tangentially to $\mathbb D_0$, with derivative
+$\phi'_\theta$. If $r_n(T_n-\theta)\Rightarrow T$ in $\mathbb D$ with $T$
+taking values in $\mathbb D_0$, then
+$r_n(\phi(T_n)-\phi(\theta))\Rightarrow\phi'_\theta(T)$.
+\emph{Used in:} Part S4 (uniform target processes; the target maps are
+uniformly Fr\'echet — hence Hadamard — differentiable by the Part S4
+differentiability theorems, the domain is a finite-dimensional parameter
+neighbourhood, and weak convergence of the normalised estimator is supplied
+by Part S3).
+\end{proposition}
+
+\begin{proposition}[Theorem 1.11.1 of \citealp{vdVW1996}; extended
+continuous mapping]\label{imp:ecmt}
+Let $g_n,g$ be maps with the property that $x_n\to x$ (along the relevant
+domains) implies $g_n(x_n)\to g(x)$, with $g$ continuous on a set containing
+the support of $X$. If $X_n\Rightarrow X$, then $g_n(X_n)\Rightarrow g(X)$.
+In particular this covers deterministic maps $g_n\to g$ uniformly on
+compacts with $g$ continuous.
+\emph{Used in:} Part S5 (floor-studentised bands, with
+$g_n=V_{\kappa_{N,n}}$ equi-Lipschitz and $g=V$).
+\end{proposition}
+
+\begin{proposition}[Theorem 4.33 of \citealp{DPZ2014}; stochastic
+Fubini]\label{imp:fubini}
+Let $(E,\mathcal E,\mu)$ be $\sigma$-finite, and let
+$\Phi:(t,\omega,x)\mapsto\Phi(t,x)$ be an appropriately measurable
+$L_2^0$-valued family with
+$\int_E\big(\E\int_0^T\norm{\Phi(t,x)}_{L_2^0}^2dt\big)^{1/2}\mu(dx)<\infty$.
+Then $\int_E\int_0^T\Phi\,dW\,d\mu=\int_0^T\int_E\Phi\,d\mu\,dW$ a.s.
+% CHECK: theorem number against the 2014 second edition.
+\emph{Used in:} Parts S1--S2 (Gaussian law of $\Psi_w$, mild-solution
+manipulations); the required square-integrability is displayed at each use.
+\end{proposition}
+
+\begin{proposition}[Section 5.3 of \citealp{DPZ2014}, after
+\citealp{DPKZ1987}; factorisation identity]\label{imp:factor}
+For $\gamma\in(0,1)$ and a stochastic convolution
+$Z_t=\int_0^tS(t-s)\Phi\,dW_s$ with the $\gamma$-integrability displayed in
+Part S1,
+\[
+ Z_t=\frac{\sin(\pi\gamma)}{\pi}\int_0^t(t-s)^{\gamma-1}S(t-s)
+ Y_\gamma(s)\,ds,
+ \qquad
+ Y_\gamma(s):=\int_0^s(s-r)^{-\gamma}S(s-r)\Phi\,dW_r .
+\]
+\emph{Used in:} Part S1 (uniform fractional maximal estimate), where the
+$L^p$ bound on $Y_\gamma$ is proved before the identity is invoked.
+\end{proposition}
+
+\begin{proposition}[Theorem III.1.3 of \citealp{EngelNagel2000}; bounded
+perturbation]\label{imp:bpt}
+Let $A$ generate a $C_0$-semigroup $T(t)$ with $\norm{T(t)}\le Me^{\omega t}$
+and let $B\in\mathcal L(X)$. Then $A+B$ (same domain) generates a
+$C_0$-semigroup $S(t)$ with $\norm{S(t)}\le Me^{(\omega+M\norm B)t}$, given
+by the Dyson--Phillips series
+$S(t)=\sum_{j\ge0}S_j(t)$, $S_0=T$,
+$S_{j+1}(t)=\int_0^tT(t-s)BS_j(s)\,ds$.
+\emph{Used in:} Part S6 (uniform bounded-perturbation estimate; hypotheses
+verified there: exponentially stable analytic semigroup by the Part S6
+standing assumption, $\varepsilon B$ bounded with
+$\norm{\varepsilon B}\le\varepsilon_0R$).
+\end{proposition}
+
+\begin{remark}[Elementary identities used without citation]
+The one-dimensional Gaussian optimal-coupling identity
+$W_2^2(\mathcal N(m_1,v_1),\mathcal N(m_2,v_2))
+=(m_1-m_2)^2+(\sqrt{v_1}-\sqrt{v_2})^2$ (see, e.g.,
+\citealp[Chapter~6]{Villani2009}) and the characteristic-function
+division argument for deconvolution are proved inline where used
+(Parts S7 and S2 respectively).
+\end{remark}

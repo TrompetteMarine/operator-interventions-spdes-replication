@@ -1,0 +1,58 @@
+\section{Semantics and identification proofs}
+
+\subsection{The Brownian-segment map}
+For $e\in C_0([0,r])$ define
+\[
+ \mathfrak I_{c,r}(e)=e(r)-c\int_0^re^{-c(r-s)}e(s)ds.
+\]
+The operator is linear and
+\[
+ \abs{\mathfrak I_{c,r}(e)}
+ \le\left(1+c\int_0^re^{-c(r-s)}ds\right)\norm e_\infty
+ \le2\norm e_\infty.
+\]
+For Brownian $e$, deterministic integration by parts gives
+\[
+ \int_0^re^{-c(r-s)}de(s)
+ =e(r)-c\int_0^re^{-c(r-s)}e(s)ds.
+\]
+This avoids treating the It\^o integral as a continuous Riemann--Stieltjes map on Wiener paths.
+
+\subsection{Exact finite representation}
+The mild solution over $[t_j,t_j+r]$ is
+\[
+ U_{t_j+r}^{K,a}=e^{raA_{0,K}}U_{t_j}^{K,a}
+ +\sigma\int_{t_j}^{t_j+r}e^{(t_j+r-s)aA_{0,K}}P_KQ^{1/2}dW_s.
+\]
+Coordinatewise, this is exactly the structural map applied to the Brownian segment. Induction over intervals proves equality on the full path. Diagonality gives $U^{K,a}=P_KU^a$.
+
+\subsection{Integrated convergence}
+The deterministic and stochastic tails satisfy
+\begin{align*}
+ \int_0^T\norm{(I-P_K)e^{taA_0}u_0}^2dt
+ &\le\frac1{2\underline a}\sum_{k>K}\frac{u_{0,k}^2}{\lambda_k},\\
+ \E\int_0^T\norm{\sigma\int_0^t(I-P_K)e^{(t-s)aA_0}Q^{1/2}dW_s}^2dt
+ &\le\frac{T\overline\sigma^2}{2\underline a}\sum_{k>K}\frac{q_k^2}{\lambda_k}.
+\end{align*}
+Both tails vanish uniformly in $a$.
+
+\subsection{Fractional maximal estimate}
+Choose a factorisation exponent below the positive margin $\delta$. Analytic-semigroup smoothing and the factorisation method yield
+\[
+ \sup_{a\in\widetilde\Theta}\E\sup_{t\le T}
+ \norm{(-A_0)^\alpha U_t^a}^2<\infty.
+\]
+The spectral projection inequality
+\[
+ \norm{(I-P_K)x}\le\lambda_{K+1}^{-\alpha}\norm{(-A_0)^\alpha x}
+\]
+then gives the pathwise rate.
+
+\subsection{Exact spectral identification}
+For a zero initial coordinate,
+\[
+ \Cov(Y_1,Y_2)=\rho\Var(Y_1),
+\]
+so the ratio identifies $\rho\in(0,1)$. Strict monotonicity of $\theta\mapsto e^{-\theta\lambda_k\Delta}$ identifies $\theta$. Substitution into the innovation variance identifies $\sigma$.
+
+The fibre criterion is immediate: a target is a function of the observed-law equivalence class if and only if it is constant on every fibre of the map $\vartheta\mapsto P_\vartheta^Y$.

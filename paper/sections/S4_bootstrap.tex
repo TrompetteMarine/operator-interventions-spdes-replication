@@ -1,0 +1,23 @@
+\section{Uniform delta method and multiplier details}
+
+The counterfactual target map is a composition of the smooth primitives $m_a(w)$, $V_a(w)$, and the normal CDF. Compactness of the intervention interval, threshold interval, and space-time weight ellipsoid gives uniform bounds on first and second derivatives. Therefore
+\[
+ \norm{T(\widehat\vartheta)-T(\vartheta_0)-\dot T_{\vartheta_0}(\widehat\vartheta-\vartheta_0)}_\infty
+ \le C\norm{\widehat\vartheta-\vartheta_0}^2.
+\]
+The finite-dimensional delta method then yields weak convergence in $C(\cT)$.
+
+For modal blocks $B_{k,N,n}$,
+\[
+ \sum_k\E\norm{B_{k,N,n}}^4
+ \lesssim\frac{\lambda_N}{\Lambda_N}+\frac1N+(\lambda_N\Delta_n)^2\to0.
+\]
+This gives consistency of the block outer-product information estimator and the conditional Lindeberg property. With Gaussian multipliers, conditional normality is exact once the estimated covariance is fixed.
+
+At a derivative zero, ordinary studentisation is undefined and the target remainder can be second order. The floor $s_\kappa$ is asymptotically inactive at regular points, while at zero-loading points its width dominates the quadratic remainder. In slow families, the additional condition
+\[
+ \frac{\sqrt{\Lambda_N}}{\sqrt{Nn}\kappa_{N,n}}\to0
+\]
+controls the omitted faster scale-coordinate contribution.
+
+For one-sided tests, the true contact set is contained in the estimated set because its normalised estimator is $O_{\Pp}(1)$ while $\eta_{N,n}\to\infty$. Regions separated from contact are excluded because the deterministic slack is of order $r_{N,n}$ and $\eta_{N,n}/r_{N,n}\to0$.

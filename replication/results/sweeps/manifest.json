@@ -1,0 +1,40 @@
+{
+  "seed": 20260709,
+  "designs": [
+    [
+      4,
+      1280
+    ],
+    [
+      6,
+      2880
+    ],
+    [
+      8,
+      5120
+    ],
+    [
+      12,
+      11520
+    ]
+  ],
+  "reps": 150,
+  "theta": 0.7,
+  "sigma": 0.8,
+  "horizon": 1.0,
+  "beta": 0.75,
+  "python": "3.10.12",
+  "numpy": "2.2.6",
+  "pandas": "2.3.3",
+  "aggregate_elapsed_s": 0.36,
+  "sha256": {
+    "estimation_sweep.png": "57d8f0c051270ddfb602b78f988e4d48256f9da5bd632d1f291c2143787c9afe",
+    "variance_monotonicity.png": "a25a71d95a2723805245aa5e9ab052e0a16ba271a96f725f90e6b29e88e5e910",
+    "estimation_N12.csv": "e9e57e7a0ac7ca8762d0bc3eb1d6b03210a8c6f90916240773966f7935a0e0b7",
+    "estimation_N4.csv": "5c83ce6d550374e80e723deffe2a060bf5c97d0a8fbda535802dfab510d2aaf8",
+    "estimation_N6.csv": "34387347bcff338537973ff552c1211681d78f89066b4028df09d05b6a2b223d",
+    "estimation_N8.csv": "32b77c21fd2cb44ca9145084e193e9a73a2c7e553bcb44af404d09c8fa5ebff9",
+    "estimation_sweep.csv": "4fa809ce719b1b874bb875426eeb05b141bdc8d7816caee8f43383891233e354",
+    "variance_monotonicity.csv": "5a222067fd2e9584326317b41d3c66f8768cf91de0558c1d266c290b4e0be473"
+  }
+}

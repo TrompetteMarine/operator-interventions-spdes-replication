@@ -1,0 +1,72 @@
+\section{Target identification}\label{sec:identification}
+
+Identification is a property of the target, observation experiment, and admissible mechanism class. Let $P_\vartheta^Y$ denote the factual observed law and let $T_\tau(\vartheta)$ denote a counterfactual target.
+
+\begin{lemma}[Fibre criterion]\label{thm:fibre}
+The target $T_\tau$ is identified from $P_\vartheta^Y$ if and only if
+\[
+ P_{\vartheta_1}^Y=P_{\vartheta_2}^Y
+ \quad\Longrightarrow\quad
+ T_\tau(\vartheta_1)=T_\tau(\vartheta_2)
+\]
+for every pair $\vartheta_1,\vartheta_2$ in the admissible model.
+\end{lemma}
+
+This elementary observation is stated as a lemma because its value is organisational rather than technical: it separates necessary-and-sufficient logic from convenient sufficient conditions. We now specialise it to spectral observations.
+
+Let $t_j=j\Delta$, and observe
+\[
+ Y_{k,j}=u_k(t_j),
+ \qquad k=1,\ldots,N.
+\]
+For each mode,
+\begin{equation}\label{eq:transition}
+ Y_{k,j+1}\mid Y_{k,j}
+ \sim N\left(\rho_k(\theta)Y_{k,j},\eta_k^2(\theta,\sigma)\right),
+\end{equation}
+where
+\[
+ \rho_k(\theta)=e^{-\theta\lambda_k\Delta},
+ \qquad
+ \eta_k^2(\theta,\sigma)
+ =\sigma^2q_k^2\frac{1-e^{-2\theta\lambda_k\Delta}}{2\theta\lambda_k}.
+\]
+
+\begin{theorem}[Exact finite-sample spectral identification]\label{thm:exact-id}
+Suppose an observed mode satisfies $q_k>0$ and is observed at $0,\Delta,2\Delta$. Equality of its finite-dimensional law identifies
+\[
+ \rho_k
+ =\frac{\Cov(Y_{k,1},Y_{k,2})}{\Var(Y_{k,1})},
+ \qquad
+ \theta=-\frac{\log\rho_k}{\lambda_k\Delta},
+\]
+and then identifies $\sigma$ from $\Var(Y_{k,1})$. Hence $(\theta,\sigma)$ and every fixed-intervention target are identified.
+\end{theorem}
+
+With only one positive-time observation, full identification still holds if an observed initial coordinate is non-zero or if at least two distinct eigenvalues are observed. If all observed initial coordinates vanish and only one repeated eigenvalue is present, the data identify the composite scale $\sigma^2h_\lambda(\theta)$ rather than the two parameters separately.
+
+\begin{remark}[No aliasing]\label{rem:no-aliasing}
+Identification of $\theta$ from $\rho_k=e^{-\theta\lambda_k\Delta}$ exploits positivity and reality of the semigroup spectrum: on the positive core, the discrete transition determines the continuous-time generator uniquely. This contrasts with the aliasing problem for general finite-parameter continuous-time systems observed at equally spaced times \citep{Phillips1973,HansenSargent1983}, in which distinct generators are compatible with the same discrete-time law.
+\end{remark}
+
+For a fixed absolute intervention, the law in \Cref{prop:gaussian-law} depends on $\sigma$ but not on the overwritten factual $\theta$. Thus a non-degenerate fixed-intervention target can remain identified even when the full factual parameter is not.
+
+For noisy observations
+\[
+ \widetilde Y_{k,j}=Y_{k,j}+\varepsilon_{k,j},
+\]
+a known error law with non-vanishing characteristic function identifies the latent finite-dimensional law by deconvolution. In the Gaussian state-space model, two positive observation times identify $(\theta,\sigma)$ when the measurement variance is known; three positive times identify an unknown constant measurement variance as well.
+
+For a general linear sensor $Y=\mathcal HU$, the mean and covariance must be treated separately. Let $\mathfrak M_\theta$ map an initial direction to its observed mean trajectory and let $\mathfrak K_\theta$ map a covariance input to the observed covariance kernel. Let $\mathfrak L_{a,w}$ and $\mathfrak V_{a,w}$ be the corresponding target maps.
+
+\begin{proposition}[Partial-observation kernel criterion]\label{prop:partial}
+A Gaussian target is identified on a linear nuisance class if and only if
+\[
+ \ker\mathfrak M_\theta\subseteq\ker\mathfrak L_{a,w}
+ \quad\text{and}\quad
+ \ker\mathfrak K_\theta\subseteq\ker\mathfrak V_{a,w}.
+\]
+Ordinary state observability controls the mean component. Covariance identification is a lifted operator problem and does not follow automatically from state observability.
+\end{proposition}
+
+A simple modal support condition becomes necessary only in an enlarged model with free mode-specific amplitudes. In the scalar positive core, known $Q$ links unobserved modes through the common $\sigma$, so observing every target mode is not necessary.

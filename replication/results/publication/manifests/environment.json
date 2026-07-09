@@ -1,0 +1,20 @@
+{
+  "timestamp_utc": "2026-07-07T00:58:46.425248+00:00",
+  "git_commit": "3c1f9091ae7934f689ccff4dc80ede7e903b3e78",
+  "python": "3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0]",
+  "platform": "Linux-4.4.0-x86_64-with-glibc2.41",
+  "processor": "",
+  "cpu_count": 56,
+  "numpy": "2.3.5",
+  "pandas": "2.2.3",
+  "scipy": "1.17.0",
+  "matplotlib": "3.10.8",
+  "elapsed_seconds": 67.12929820299996,
+  "heat_validation": {
+    "elapsed_seconds": 30.772011861000465,
+    "planned_grid_resolved_cells": 1,
+    "planned_grid_total_cells": 25,
+    "core_replicates": 3000,
+    "bootstrap_rows": 7
+  }
+}

@@ -1,0 +1,147 @@
+Metadata-Version: 2.4
+Name: causal-spdes
+Version: 0.1.0
+Summary: Operator interventions and uniform counterfactual inference for linear SPDEs
+Author: Gabriel Lucas Stephane Bontemps
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: LICENSE-TEXT
+Requires-Dist: numpy>=1.26
+Requires-Dist: scipy>=1.11
+Requires-Dist: matplotlib>=3.8
+Requires-Dist: pandas>=2.1
+Requires-Dist: pyyaml>=6.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+Dynamic: license-file
+
+# Operator Interventions, Identification, and Uniform Counterfactual Inference for Linear SPDEs
+
+This repository contains the manuscript, technical supplement, theorem archive, and
+Python/Julia replication package for a causal-statistical analysis of operator
+interventions in linear parabolic stochastic partial differential equations.
+
+The paper studies
+
+\[
+  dU_t = \theta A_0 U_t\,dt + \sigma Q^{1/2}dW_t,
+  \qquad U_0=u_0,
+\]
+
+and interventions replacing the generator coefficient by
+\(\operatorname{do}(\theta=\widetilde\theta)\). The target is the law of a
+space-time field functional
+
+\[
+  \Psi_w(U)=\int_0^T \langle w_t,U_t\rangle_H\,dt.
+\]
+
+## Main contributions
+
+1. Galerkin structural causal models converge to the post-intervention SPDE under a common-noise construction.
+2. Exact and target-specific identification results are derived for spectral and noisy observations.
+3. The exact discrete spectral likelihood is mixed-rate LAN: drift and scale are learned at different rates.
+4. Uniform counterfactual CDF, quantile, tail, and distributional-effect processes are obtained.
+5. A feasible modal-score multiplier gives simultaneous confidence bands and one-sided contact-set tests.
+6. Operator-to-law derivatives and causal response gradients are established.
+7. Statistical, Galerkin, temporal, and operator errors are combined in one full-field theorem.
+8. Sharp non-identification constructions show why fixed forcing, measurement invariance, and coupling assumptions matter.
+
+## Repository layout
+
+```text
+paper/                     journal-facing manuscript, supplement, bibliography, PDFs
+  main.tex
+  main.pdf
+  supplement.tex
+  supplement.pdf
+  references.bib
+  sections/
+  figures/
+
+theory/work_packages/      complete WP1-WP9 theorem and research-note archive
+
+replication/
+  python/                   importable Python implementation, scripts, and tests
+  julia/                    Julia parity implementation and tests
+  config/                   deterministic profiles
+  results/                  generated tables, figures, and logs
+
+docs/                      theorem map, assumptions, reproducibility notes
+.github/workflows/          Python, Julia, and LaTeX CI
+```
+
+## Reproduce
+
+### Native environment
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .[dev]
+make verify
+make reproduce-preview
+make paper
+```
+
+Julia parity checks:
+
+```bash
+julia --project=replication/julia -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
+julia --project=replication/julia replication/julia/scripts/run_all.jl preview
+```
+
+### Docker
+
+```bash
+docker build -t causal-spdes .
+docker run --rm -v "$PWD/replication/results:/work/replication/results" causal-spdes
+```
+
+### Publication profile
+
+```bash
+make reproduce-publication
+```
+
+The publication profile is computationally heavier. All randomness is seeded and all
+reported numerical outputs are generated from code.
+
+## Verification contract
+
+`make verify` checks:
+
+- exact OU transition identities;
+- Gaussian field-functional formulas;
+- profile likelihood and mixed-rate normalisation;
+- multiplier covariance identities;
+- Galerkin-rate monotonicity;
+- finite-difference operator derivatives;
+- factual merging and counterfactual separation in the non-identification examples;
+- Python/Julia formula parity through fixed reference values.
+
+## Manuscript build
+
+```bash
+make paper
+```
+
+This produces:
+
+- `paper/main.pdf`;
+- `paper/supplement.pdf`.
+
+## Research status
+
+WP1-WP9 are completed at theorem-package level. WP10 reconstructs the paper around
+that chain. The remaining pre-submission task is editorial rather than architectural:
+line-by-line proof checking, journal formatting, and final author review.
+
+## Citation
+
+See `CITATION.cff`. A release DOI can be added after archival deposition.
+
+## Licence
+
+Code: MIT. Manuscript text: CC BY 4.0. See `LICENSE` and `LICENSE-TEXT`.

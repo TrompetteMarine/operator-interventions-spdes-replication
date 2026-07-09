@@ -1,0 +1,24 @@
+{
+  "spatial_slopes": {
+    "mean_tail": -2.5918565084675587,
+    "variance_tail": -4.627202870193424,
+    "strong_functional_rms": -2.315833734433982,
+    "optimal_W2": -2.591856512603655,
+    "cdf_sup": -2.591856506320602,
+    "predicted_mean": -2.6,
+    "predicted_strong_rms": -2.3,
+    "predicted_variance": -4.6
+  },
+  "temporal_slopes": {
+    "mean_error": 0.9941043861724822,
+    "variance_error": 0.9990593594855142,
+    "optimal_W2": 0.9983853879100764,
+    "cdf_sup": 0.9985624612671977
+  },
+  "elapsed_seconds": 12.105623069000103,
+  "python": "3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0]",
+  "platform": "Linux-4.4.0-x86_64-with-glibc2.41",
+  "numpy": "2.3.5",
+  "pandas": "2.2.3",
+  "scipy": "1.17.0"
+}

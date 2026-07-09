@@ -1,0 +1,145 @@
+% Closure of wp3 thm:consistency  [drafted v2 — author line-check required]
+% NOTE: this closure replaces the sketched 2-d covering argument by a profile
+% argument. The covering route requires sup-fluctuations o_P(Lambda_N) over the
+% full rectangle, which is delicate when n grows much faster than the regime
+% requires; profiling sigma exactly removes the difficulty.
+\closuredraft
+\begin{proof}
+In addition to Assumption~\ref{ass:regime} we use the spectral-growth
+condition
+\begin{equation}\label{eq:cons-weyl}
+ N\sqrt{\lambda_N}=o(\LamN),
+\end{equation}
+which is automatic in the model class of the main text: under Weyl growth
+$\lambda_k\asymp k^{2/d}$ one has $\LamN\asymp N^{1+2/d}$ while
+$N\sqrt{\lambda_N}\asymp N^{1+1/d}$, and $1/d<2/d$. It enters only through
+the two displays marked below.
+By Proposition~\ref{prop:profile} it suffices to study the profile criterion
+\[
+ \Phi_{N,n}(\theta)
+ :=Nn\log\widehat\sigma^2_{N,n}(\theta)+n\sum_{k\le N}\log h_{k,n}(\theta),
+ \qquad
+ \widehat\theta_{N,n}\in\arg\min_\theta\Phi_{N,n}(\theta).
+\]
+Write $h_k^0=h_{k,n}(\theta_0)$, $\rho_k^0=\rho_{k,n}(\theta_0)$,
+$v_k^0=\sigma_0^2q_k^2h_k^0$, and decompose
+$r_{k,j}(\theta)=\sqrt{v_k^0}\,\varepsilon_{k,j}
++(\rho_k^0-\rho_{k,n}(\theta))Y_{k,j}$, so that
+\begin{equation}\label{eq:cons-dec}
+ \widehat\sigma^2_{N,n}(\theta)=A(\theta)+B(\theta)+C(\theta),
+\end{equation}
+with
+\[
+ A(\theta)=\frac{\sigma_0^2}{Nn}\sum_{k,j}\frac{h_k^0}{h_{k,n}(\theta)}
+ \varepsilon_{k,j}^2,\quad
+ B(\theta)=\frac{2}{Nn}\sum_{k,j}
+ \frac{(\rho_k^0-\rho_{k,n}(\theta))\sqrt{v_k^0}}{q_k^2h_{k,n}(\theta)}
+ \varepsilon_{k,j}Y_{k,j},\quad
+ C(\theta)=\frac{1}{Nn}\sum_{k,j}
+ \frac{(\rho_k^0-\rho_{k,n}(\theta))^2Y_{k,j}^2}{q_k^2h_{k,n}(\theta)}\ge0.
+\]
+Let $m^2(\theta):=\E\widehat\sigma^2(\theta)=\sigma_0^2H(\theta)+D(\theta)$,
+where $H(\theta):=N^{-1}\sum_k h_k^0/h_{k,n}(\theta)$ and
+$D(\theta):=\E C(\theta)$. Note $H(\theta_0)=1$, $D(\theta_0)=0$, and by
+\eqref{eq:g}, $|\log(h_k^0/h_{k,n}(\theta))|\le C\lambda_k\Delta_n$ on
+$\Theta$, so $c\le H\le C$ and, with $\beta_{N,n}:=\LamN/(Nn)$,
+\begin{equation}\label{eq:cons-m-diff}
+ \sup_\theta|H(\theta)-1|\le CT\beta_{N,n},
+ \qquad
+ \sup_\theta D(\theta)\le C\beta_{N,n},
+\end{equation}
+the second from
+$(\rho^0_k-\rho_k)^2\E Y_{k,j}^2/(q_k^2h_k)\le
+C\lambda_k^2\Delta_n^2(s_k^2+u_{0,k}^2\rho_k^{2j})/(q_k^2\Delta_n)$ and
+Assumption~\ref{ass:regime}(iii).
+
+\emph{Step 1: deterministic profile separation.}
+Let $\bar\Phi(\theta):=Nn\log m^2(\theta)+n\sum_k\log h_{k,n}(\theta)$. By
+concavity of $\log$,
+$Nn\log H(\theta)\ge n\sum_k\log(h^0_k/h_{k,n}(\theta))$, hence
+\[
+ \bar\Phi(\theta)-\bar\Phi(\theta_0)
+ =Nn\log H(\theta)+n\sum_k\log\frac{h_{k,n}(\theta)}{h^0_k}
+ +Nn\log\Big(1+\frac{D(\theta)}{\sigma_0^2H(\theta)}\Big)
+ \ \ge\ c\,Nn\,D(\theta),
+\]
+using $\log(1+u)\ge u/2$ for $0\le u\le1$ (valid for large $N,n$ by
+\eqref{eq:cons-m-diff}). The drift computation in the proof of
+Lemma~\ref{lem:KL} gives, for $|\theta-\theta_0|\ge\varepsilon$,
+$NnD(\theta)\ge c_\varepsilon\LamN$; hence
+\begin{equation}\label{eq:cons-det-sep}
+ \inf_{|\theta-\theta_0|\ge\varepsilon}
+ \big[\bar\Phi(\theta)-\bar\Phi(\theta_0)\big]
+ \ \ge\ c_\varepsilon\LamN .
+\end{equation}
+
+\emph{Step 2: uniform relative fluctuations at scale $\beta_{N,n}$.}
+Let $\zeta(\theta):=\widehat\sigma^2(\theta)-m^2(\theta)$. We claim
+\begin{equation}\label{eq:cons-fluct}
+ \sup_\theta|\zeta(\theta)-\zeta(\theta_0)|=o_{\Pp}(\beta_{N,n}),
+ \qquad
+ \zeta(\theta_0)=O_{\Pp}\big((Nn)^{-1/2}\big).
+\end{equation}
+The second statement is immediate:
+$\zeta(\theta_0)=\sigma_0^2(Nn)^{-1}\sum_{k,j}(\varepsilon_{k,j}^2-1)$ has
+variance $2\sigma_0^4/(Nn)$. For the first, treat the three parts of
+\eqref{eq:cons-dec}. \emph{(A)} With $\omega_k:=\sum_j(\varepsilon^2_{k,j}-1)$,
+$\E|\omega_k|\le\sqrt{2n}$, and
+$|h^0_k/h_{k,n}(\theta)-1|\le C\lambda_k\Delta_n$,
+\[
+ \E\sup_\theta|A(\theta)-\E A(\theta)-(A(\theta_0)-\E A(\theta_0))|
+ \le\frac{C}{Nn}\sum_k\lambda_k\Delta_n\sqrt{2n}
+ =\frac{C\Delta_n\LamN}{N\sqrt n}
+ =C\beta_{N,n}\cdot\frac{T}{\sqrt n}=o(\beta_{N,n}).
+\]
+\emph{(B)} $B(\theta_0)=0$, and pointwise-in-$\theta$ the coefficient of
+$M_k:=\sum_j\varepsilon_{k,j}Y_{k,j}$ is bounded by
+$C\sigma_0\lambda_k\sqrt{\Delta_n}/q_k$; with
+$\E M_k^2=\sum_j\E Y^2_{k,j}\le ns_k^2+Cu_{0,k}^2/(\lambda_k\Delta_n)$,
+\[
+ \E\sup_\theta|B(\theta)|
+ \le\frac{C}{Nn}\Big\{\sum_k\sigma_0^2\sqrt{\lambda_kT}
+ +\sum_k\frac{\sigma_0\sqrt{\lambda_k}\,u_{0,k}}{q_k}\Big\}
+ \le\frac{C}{Nn}\Big\{N\sqrt{\lambda_NT}+\sqrt{N R_N}\Big\},
+\]
+by Cauchy--Schwarz. Both terms are $o(\beta_{N,n})$: dividing by
+$\beta_{N,n}=\LamN/(Nn)$ leaves $N\sqrt{\lambda_NT}/\LamN\to0$ by
+\eqref{eq:cons-weyl}, and
+$\sqrt{NR_N}/\LamN\le\sqrt{N\,o(\LamN)}/\LamN\to0$ since
+$N\le C\LamN$ ($\lambda_k\ge\lambda_1>0$).
+\emph{(C)} The coefficient of $\sum_j(Y^2_{k,j}-\E Y^2_{k,j})$ is bounded by
+$C\lambda_k^2\Delta_n/q_k^2$ uniformly in $\theta$, and (variance bound in Step~2 of the proof of Lemma~\ref{lem:score-clt})
+$\mathrm{sd}\big(\sum_j Y^2_{k,j}\big)
+\le C(s_k^2+u_{0,k}s_k)\sqrt{n/(\lambda_k\Delta_n)}$; hence
+\[
+ \E\sup_\theta|C(\theta)-D(\theta)|
+ \le\frac{C}{Nn}\Big\{N\sqrt{\lambda_NT}
+ +\sqrt T\sqrt{\LamN R_N}\Big\}=o(\beta_{N,n}),
+\]
+the last comparison as in (B) plus $\sqrt{\LamN R_N}/\LamN=\sqrt{R_N/\LamN}\to0$.
+This proves \eqref{eq:cons-fluct}.
+
+\emph{Step 3: assembly.}
+On $|\theta-\theta_0|\ge\varepsilon$, using $m^2,\widehat\sigma^2(\theta_0)$
+bounded away from $0$ and $\infty$ in probability,
+\begin{align*}
+ \Phi(\theta)-\Phi(\theta_0)
+ &=\bar\Phi(\theta)-\bar\Phi(\theta_0)
+ +Nn\Big\{\log\frac{\widehat\sigma^2(\theta)}{m^2(\theta)}
+ -\log\frac{\widehat\sigma^2(\theta_0)}{m^2(\theta_0)}\Big\}\\
+ &\ge c_\varepsilon\LamN
+ -CNn\Big\{|\zeta(\theta)-\zeta(\theta_0)|
+ +|\zeta(\theta_0)|\,\big|m^2(\theta)-m^2(\theta_0)\big|\Big\}\\
+ &\ge c_\varepsilon\LamN
+ -Nn\cdot o_{\Pp}(\beta_{N,n})
+ -CNn\cdot O_{\Pp}\big((Nn)^{-1/2}\big)\cdot C\beta_{N,n}
+ \ =\ c_\varepsilon\LamN-o_{\Pp}(\LamN),
+\end{align*}
+uniformly in $\theta$, using \eqref{eq:cons-m-diff} for the
+$m^2$-difference and \eqref{eq:cons-fluct}. Hence
+$\Pp(|\widehat\theta_{N,n}-\theta_0|\ge\varepsilon)\to0$. Finally,
+$\widehat\sigma^2_{N,n}=\widehat\sigma^2(\widehat\theta_{N,n})
+=m^2(\widehat\theta_{N,n})+\zeta(\widehat\theta_{N,n})
+=\sigma_0^2+O(\beta_{N,n})+o_{\Pp}(1)\to\sigma_0^2$
+in probability, by \eqref{eq:cons-m-diff} and \eqref{eq:cons-fluct}.
+\end{proof}

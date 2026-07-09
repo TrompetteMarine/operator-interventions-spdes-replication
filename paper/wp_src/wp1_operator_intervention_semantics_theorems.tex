@@ -1,0 +1,704 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{definition}[assumption]{Definition}
+\newtheorem{proposition}[assumption]{Proposition}
+\newtheorem{theorem}[assumption]{Theorem}
+\newtheorem{lemma}[assumption]{Lemma}
+\newtheorem{corollary}[assumption]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[assumption]{Remark}
+
+\newcommand{\Hh}{H}
+\newcommand{\Lop}{\mathcal L}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Pp}{\mathbb P}
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\1}{\mathbf 1}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle_H}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\hnorm}[1]{\left\lVert #1\right\rVert_H}
+\newcommand{\cnorm}[1]{\left\lVert #1\right\rVert_{C([0,T];H)}}
+\newcommand{\Wass}{\mathsf W_2}
+\newcommand{\Law}{\mathcal L}
+\newcommand{\ThetaI}{\widetilde\Theta}
+\newcommand{\thetamin}{\underline{\widetilde\theta}}
+\newcommand{\thetamax}{\overline{\widetilde\theta}}
+\newcommand{\sigmamax}{\overline\sigma}
+\newcommand{\Lambdaop}{\Lambda}
+\newcommand{\Ddom}{D}
+
+\title{Work Package 1: Operator-Intervention Semantics for Linear Parabolic SPDEs\\
+\large Corrected theorem package and proofs}
+\author{}
+\date{3 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note gives a rigorous structural semantics for interventions on the drift operator of a diagonal linear parabolic SPDE.  At every Galerkin level, the primitive exogenous variables are ordinary Brownian path segments.  The exact Ornstein--Uhlenbeck stochastic convolution is rewritten, by semimartingale integration by parts, as a continuous functional of each path segment.  Hence the finite structural equations are genuine Borel maps on a canonical path space and use the same realised disturbances under every intervention value.  The intervened finite structural model agrees exactly with the projected post-intervention SPDE.  Under baseline trace summability, the projected counterfactuals converge uniformly over interventions in integrated mean square.  Under a strictly stronger fractional factorisation condition, they converge in \(L^2(\Omega;C([0,T];H))\) at an explicit spectral rate.  Uniform convergence of field functionals and their laws in quadratic Wasserstein distance follows.  A final transfer result separates this exact structural semantics from the additional temporal error of an approximate numerical scheme.
+\end{abstract}
+
+\section{Model, notation, and assumptions}
+
+Let \(H=L^2(D)\), where \(D\subset\R^d\) is bounded.  Set
+\[
+  \Lambdaop:=-A_0.
+\]
+Thus \(\Lambdaop\) is positive and self-adjoint.
+
+\begin{assumption}[Spectral generator]\label{ass:spectral}
+The operator \(A_0:D(A_0)\subset H\to H\) is densely defined, self-adjoint, negative, and has compact resolvent.  There are an orthonormal basis \((e_k)_{k\ge1}\) and eigenvalues
+\[
+  0<\lambda_1\le \lambda_2\le\cdots,\qquad \lambda_k\uparrow\infty,
+\]
+such that
+\[
+  A_0e_k=-\lambda_ke_k,
+  \qquad
+  \Lambdaop e_k=\lambda_ke_k.
+\]
+When a rate in \(K\) is translated into a dimension-dependent power, we additionally assume Weyl growth \(\lambda_k\asymp k^{2/d}\).
+\end{assumption}
+
+\begin{assumption}[Intervention and scale classes]\label{ass:parameters}
+The intervention set and noise-scale set are compact subsets of the positive half-line:
+\[
+  \ThetaI=[\thetamin,\thetamax]\Subset(0,\infty),
+  \qquad
+  \Sigma=[\underline\sigma,\sigmamax]\Subset(0,\infty).
+\]
+All constants below may depend on \(T,\thetamin,\thetamax,\underline\sigma,\sigmamax\), but not on \(K\) or on the particular \(\widetilde\theta\in\ThetaI\).
+\end{assumption}
+
+Let \(W\) be a cylindrical Wiener process on \(H\), represented as
+\[
+  W_t=\sum_{k\ge1}\beta_k(t)e_k,
+\]
+where \((\beta_k)_{k\ge1}\) are independent standard Brownian motions.  Let
+\[
+  Q^{1/2}e_k=q_ke_k,\qquad q_k\ge0.
+\]
+For \(\widetilde\theta\in\ThetaI\), define
+\[
+  S_{\widetilde\theta}(t):=e^{t\widetilde\theta A_0}
+  =e^{-t\widetilde\theta\Lambdaop}.
+\]
+The post-intervention field is the mild solution
+\begin{equation}\label{eq:mild}
+  U_t^{\widetilde\theta}
+  =S_{\widetilde\theta}(t)u_0
+   +\sigma\int_0^tS_{\widetilde\theta}(t-s)Q^{1/2}\,dW_s.
+\end{equation}
+Its modal coordinates satisfy
+\begin{equation}\label{eq:mode}
+  u_k^{\widetilde\theta}(t)
+  =e^{-\widetilde\theta\lambda_kt}u_{0,k}
+   +\sigma q_k\int_0^t e^{-\widetilde\theta\lambda_k(t-s)}\,d\beta_k(s).
+\end{equation}
+
+\begin{assumption}[Baseline Hilbert-space summability]\label{ass:baseline}
+The initial state belongs to \(H\), and
+\[
+  \sum_{k\ge1}\frac{q_k^2}{\lambda_k}<\infty.
+\]
+\end{assumption}
+
+Assumption~\ref{ass:baseline} is the minimal condition used in the integrated convergence and field-functional results below.  It is not, by itself, used to claim a maximal fractional-domain estimate.
+
+\begin{assumption}[Fractional maximal-regularity margin]\label{ass:strong}
+There exist \(\alpha>0\) and \(\delta\in(0,\tfrac12)\) such that
+\[
+  u_0\in D(\Lambdaop^\alpha),
+  \qquad
+  \sum_{k\ge1}q_k^2\lambda_k^{2(\alpha+\delta)-1}<\infty.
+\]
+\end{assumption}
+
+The positive margin \(\delta\) is deliberate.  The boundary condition
+\(\sum_kq_k^2\lambda_k^{2\alpha-1}<\infty\) controls fixed-time second moments in \(D(\Lambdaop^\alpha)\), but it does not automatically provide the stated \(L^2(\Omega;C([0,T];D(\Lambdaop^\alpha)))\) maximal estimate.  Assumption~\ref{ass:strong} is a clean sufficient condition obtained from the stochastic-convolution factorisation method.
+
+\section{The exact Brownian-segment structural map}
+
+Fix an interval length \(h>0\), and let
+\[
+  C_0([0,h];\R^K)
+  :=\{e\in C([0,h];\R^K):e(0)=0\}.
+\]
+The key point is that the exact Ornstein--Uhlenbeck convolution can be made a continuous functional of an ordinary continuous path segment.
+
+\begin{definition}[Pathwise convolution functional]\label{def:pathfunctional}
+For \(a\ge0\), \(r\in[0,h]\), and \(e\in C_0([0,h];\R)\), define
+\begin{equation}\label{eq:Iar}
+  \mathfrak I_{a,r}(e)
+  :=e(r)-a\int_0^r e^{-a(r-s)}e(s)\,ds.
+\end{equation}
+For \(x=(x_1,\ldots,x_K)\in\R^K\), define the local path map
+\begin{equation}\label{eq:Gpath}
+ \bigl[\mathfrak G_{\widetilde\theta,K,h}(x,e)(r)\bigr]_k
+ :=e^{-\widetilde\theta\lambda_kr}x_k
+   +\sigma q_k\mathfrak I_{\widetilde\theta\lambda_k,r}(e_k),
+ \qquad 0\le r\le h.
+\end{equation}
+Its endpoint map is
+\[
+  G_{\widetilde\theta,K,h}(x,e)
+  :=\mathfrak G_{\widetilde\theta,K,h}(x,e)(h).
+\]
+\end{definition}
+
+\begin{proposition}[Continuity and stochastic-integral identity]\label{prop:pathmap}
+For fixed \(K\) and \(h\), the map
+\[
+ (\widetilde\theta,x,e)
+ \longmapsto
+ \mathfrak G_{\widetilde\theta,K,h}(x,e)
+\]
+is jointly continuous from
+\(\ThetaI\times\R^K\times C_0([0,h];\R^K)\) into \(C([0,h];\R^K)\).  In particular, it is Borel measurable.  If \(E(r)=\beta(t+r)-\beta(t)\) is a Brownian segment, then, for every \(a\ge0\) and \(r\in[0,h]\),
+\begin{equation}\label{eq:ibpidentity}
+ \mathfrak I_{a,r}(E)
+ =\int_0^r e^{-a(r-s)}\,dE(s)
+ \quad\text{almost surely}.
+\end{equation}
+Consequently, \(\mathfrak G\) is a rigorous structural map driven by an ordinary path-valued exogenous variable.
+\end{proposition}
+
+\begin{proof}
+For fixed \((a,r)\), formula \eqref{eq:Iar} is linear and continuous in the supremum norm.  On compact sets of \((a,r)\), the kernel \((a,r,s)\mapsto a\1_{\{s\le r\}}e^{-a(r-s)}\) varies continuously in \(L^1(ds)\).  This gives joint continuity of \((a,r,e)\mapsto\mathfrak I_{a,r}(e)\), uniformly in \(r\), and therefore joint continuity of \(\mathfrak G\).
+
+For the stochastic identity, fix \(a,r\) and set \(f_s=e^{-a(r-s)}\) on \([0,r]\).  The function \(f\) is deterministic and continuously differentiable, with \(df_s=af_s\,ds\).  Semimartingale integration by parts yields
+\[
+ f_rE(r)-f_0E(0)
+ =\int_0^r f_s\,dE(s)+\int_0^r E(s)\,df_s.
+\]
+Because \(f_r=1\) and \(E(0)=0\), rearrangement gives exactly \eqref{eq:Iar}--\eqref{eq:ibpidentity}.  No pathwise Riemann--Stieltjes integral against the Brownian path is being postulated: the right-hand side of \eqref{eq:Iar} is an ordinary Lebesgue integral and is equal to the It\^o integral by integration by parts.
+\end{proof}
+
+\paragraph{Interpretation.}
+The primitive disturbance is the Brownian segment itself.  The intervention changes the deterministic filter through which that same segment enters the state equation.  The induced conditional transition variance therefore changes with \(\widetilde\theta\), although the primitive noise mechanism has not changed.
+
+\section{Galerkin structural causal model and intervention}
+
+Let
+\[
+  H_K=\operatorname{span}\{e_1,\ldots,e_K\},
+  \qquad
+  P_K:H\to H_K
+\]
+be the orthogonal projection.  Let \(A_{0,K}=P_KA_0|_{H_K}\).  Consider a deterministic partition
+\[
+  \pi=\{0=t_0<t_1<\cdots<t_J=T\},
+  \qquad h_j=t_{j+1}-t_j.
+\]
+For each interval and mode, define the exogenous path segment
+\[
+  E_{k,j}(r)=\beta_k(t_j+r)-\beta_k(t_j),
+  \qquad 0\le r\le h_j,
+\]
+and write \(E_j^K=(E_{1,j},\ldots,E_{K,j})\).
+
+\begin{definition}[Exact Galerkin structural model]\label{def:scm}
+For a mechanism value \(\eta>0\), set
+\[
+  X_0^{K,\eta}=P_Ku_0
+\]
+(in modal coordinates) and recursively define
+\begin{equation}\label{eq:recursion}
+  X_{j+1}^{K,\eta}
+  =G_{\eta,K,h_j}(X_j^{K,\eta},E_j^K).
+\end{equation}
+For \(r\in[0,h_j]\), define the within-interval path by
+\begin{equation}\label{eq:stitch}
+  \mathcal X_{t_j+r}^{K,\eta,\pi}
+  =\mathfrak G_{\eta,K,h_j}(X_j^{K,\eta},E_j^K)(r).
+\end{equation}
+The intervention \(do_K(\theta=\widetilde\theta)\) replaces every local mechanism
+\(\mathfrak G_{\theta,K,h_j}\) by \(\mathfrak G_{\widetilde\theta,K,h_j}\), while leaving \(P_Ku_0\), \(\sigma\), \((q_k)_{k\le K}\), the basis, the partition, and every realised segment \(E_j^K\) unchanged.
+\end{definition}
+
+\begin{proposition}[Consistency, overwrite, and projection commutation]\label{prop:algebra}
+The intervention has the following properties.
+\begin{enumerate}[label=(\roman*)]
+\item Factual consistency:
+\[
+ do_K(\theta=\theta)\mathcal X^{K,\theta,\pi}
+ =\mathcal X^{K,\theta,\pi}.
+\]
+\item Overwrite consistency:
+\[
+ do_K(\theta=\theta_2)\circ do_K(\theta=\theta_1)
+ =do_K(\theta=\theta_2).
+\]
+\item Projection/intervention commutation:
+\[
+ P_K\bigl[do(\theta=\widetilde\theta)U\bigr]
+ =do_K(\theta=\widetilde\theta)[P_KU].
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+The first two identities follow directly from replacement of the mechanism label.  For the third, \(P_K\) commutes with \(S_{\widetilde\theta}(t)\), and
+\[
+ P_K\int_0^tS_{\widetilde\theta}(t-s)Q^{1/2}\,dW_s
+ =\int_0^tS_{\widetilde\theta,K}(t-s)P_KQ^{1/2}\,dW_s.
+\]
+Thus the projection of the post-intervention mild solution is the Galerkin post-intervention mild solution.  In the present diagonal model this equality is also immediate mode by mode.
+\end{proof}
+
+\begin{theorem}[Exact finite structural representation]\label{thm:exact}
+Fix \(K\), a partition \(\pi\), and \(\widetilde\theta\in\ThetaI\).  Then the path generated by the intervened exact Galerkin structural model satisfies
+\begin{equation}\label{eq:exact}
+  \mathcal X_t^{K,do(\theta=\widetilde\theta),\pi}
+  =U_t^{K,\widetilde\theta}
+  =P_KU_t^{\widetilde\theta},
+  \qquad 0\le t\le T,
+\end{equation}
+almost surely.  The equality holds for the entire stitched path, not only at the grid points.  Consequently, the exact structural path is independent of the chosen partition.
+\end{theorem}
+
+\begin{proof}
+At \(t_0=0\), both sides equal \(P_Ku_0\).  Suppose equality holds at \(t_j\).  For \(r\in[0,h_j]\), the Galerkin mild flow is
+\[
+ U_{t_j+r}^{K,\widetilde\theta}
+ =S_{\widetilde\theta,K}(r)U_{t_j}^{K,\widetilde\theta}
+  +\sigma\int_{t_j}^{t_j+r}
+  S_{\widetilde\theta,K}(t_j+r-s)P_KQ^{1/2}\,dW_s.
+\]
+In coordinate \(k\le K\), Proposition~\ref{prop:pathmap} rewrites the stochastic integral as
+\[
+ \sigma q_k\mathfrak I_{\widetilde\theta\lambda_k,r}(E_{k,j}).
+\]
+The induction hypothesis and Definition~\ref{def:scm} therefore give equality on the whole interval \([t_j,t_{j+1}]\).  Induction proves the first equality in \eqref{eq:exact}; Proposition~\ref{prop:algebra} gives the second.
+\end{proof}
+
+\paragraph{Meaning.}
+At finite \(K\), there is no temporal approximation.  The recursive structural system is exactly the Galerkin SPDE written as a composition of measurable local mechanisms.  The partition is only a device for displaying the recursive causal architecture.
+
+\section{Uniform integrated Galerkin convergence}
+
+\begin{theorem}[Integrated convergence under baseline summability]\label{thm:integrated}
+Under Assumptions~\ref{ass:spectral}--\ref{ass:baseline},
+\begin{equation}\label{eq:intconv}
+ \sup_{\widetilde\theta\in\ThetaI,\,\sigma\in\Sigma}
+ \E\int_0^T
+ \hnorm{U_t^{\widetilde\theta}-P_KU_t^{\widetilde\theta}}^2\,dt
+ \longrightarrow0.
+\end{equation}
+More precisely, with
+\begin{equation}\label{eq:BK}
+ B_K:=
+ \frac{1}{2\thetamin}
+ \sum_{k>K}\frac{|u_{0,k}|^2}{\lambda_k}
+ +\frac{T\sigmamax^2}{2\thetamin}
+ \sum_{k>K}\frac{q_k^2}{\lambda_k},
+\end{equation}
+we have
+\[
+ \sup_{\widetilde\theta,\sigma}
+ \E\int_0^T
+ \hnorm{U_t^{\widetilde\theta}-P_KU_t^{\widetilde\theta}}^2\,dt
+ \le B_K\downarrow0.
+\]
+\end{theorem}
+
+\begin{proof}
+By orthogonality and the zero mean of the stochastic convolution,
+\begin{align*}
+ &\E\int_0^T
+ \hnorm{(I-P_K)U_t^{\widetilde\theta}}^2\,dt\\
+ &=\sum_{k>K}|u_{0,k}|^2\int_0^T e^{-2\widetilde\theta\lambda_kt}\,dt
+ +\sigma^2\sum_{k>K}q_k^2
+   \int_0^T\int_0^t e^{-2\widetilde\theta\lambda_k(t-s)}\,ds\,dt.
+\end{align*}
+The first term is bounded by
+\[
+ \frac1{2\thetamin}
+ \sum_{k>K}\frac{|u_{0,k}|^2}{\lambda_k}.
+\]
+For the second, It\^o isometry and \(\int_0^t e^{-2\widetilde\theta\lambda_kr}\,dr\le(2\thetamin\lambda_k)^{-1}\) give
+\[
+ \frac{T\sigmamax^2}{2\thetamin}
+ \sum_{k>K}\frac{q_k^2}{\lambda_k}.
+\]
+Both tails vanish by Assumption~\ref{ass:baseline} and \(u_0\in H\).
+\end{proof}
+
+\paragraph{Meaning.}
+This is the baseline approximation result needed for integrated field functionals.  It does not require a maximal-in-time estimate and therefore uses only the natural covariance trace condition \(\sum q_k^2/\lambda_k<\infty\).
+
+\section{Fractional maximal regularity and pathwise convergence}
+
+\begin{lemma}[Uniform fractional maximal estimate]\label{lem:maximal}
+Under Assumptions~\ref{ass:spectral}, \ref{ass:parameters}, and \ref{ass:strong}, the mild solution has a continuous \(D(\Lambdaop^\alpha)\)-valued version and
+\begin{equation}\label{eq:maximal}
+ \sup_{\widetilde\theta\in\ThetaI,\,\sigma\in\Sigma}
+ \E\sup_{0\le t\le T}
+ \hnorm{\Lambdaop^\alpha U_t^{\widetilde\theta}}^2
+ <\infty.
+\end{equation}
+In fact, for a suitable \(p>2\), the supremum in \eqref{eq:maximal} has a uniformly bounded \(p\)-th moment.
+\end{lemma}
+
+\begin{proof}
+Write \(U^{\widetilde\theta}=S_{\widetilde\theta}(\cdot)u_0+Z^{\widetilde\theta}\), where
+\[
+ Z_t^{\widetilde\theta}
+ =\sigma\int_0^tS_{\widetilde\theta}(t-s)Q^{1/2}\,dW_s.
+\]
+The deterministic term satisfies
+\[
+ \sup_{t\le T}\hnorm{\Lambdaop^\alpha S_{\widetilde\theta}(t)u_0}
+ \le\hnorm{\Lambdaop^\alpha u_0}
+\]
+because \(S_{\widetilde\theta}\) is a contraction and commutes with \(\Lambdaop^\alpha\).
+
+Choose
+\[
+ 0<\gamma<\min\{\delta,\tfrac12\}
+\]
+and then choose \(p>\max\{2,1/\gamma\}\).  Define the factor process
+\[
+ Y_{\gamma}^{\widetilde\theta}(s)
+ :=\sigma\int_0^s
+ (s-r)^{-\gamma}
+ \Lambdaop^\alpha S_{\widetilde\theta}(s-r)Q^{1/2}\,dW_r.
+\]
+It\^o isometry and diagonalisation give
+\begin{align*}
+ \E\hnorm{Y_{\gamma}^{\widetilde\theta}(s)}^2
+ &=\sigma^2\sum_{k\ge1}q_k^2\lambda_k^{2\alpha}
+ \int_0^s r^{-2\gamma}e^{-2\widetilde\theta\lambda_kr}\,dr\\
+ &\le C_{\gamma,\thetamin,\sigmamax}
+ \sum_{k\ge1}q_k^2\lambda_k^{2\alpha+2\gamma-1}<\infty.
+\end{align*}
+The last inequality follows from
+\[
+ \int_0^\infty r^{-2\gamma}e^{-2\widetilde\theta\lambda_kr}\,dr
+ =\Gamma(1-2\gamma)(2\widetilde\theta\lambda_k)^{2\gamma-1}
+\]
+and Assumption~\ref{ass:strong}.  The bound is uniform in \(s\), \(\widetilde\theta\), and \(\sigma\).  Since \(Y_\gamma^{\widetilde\theta}(s)\) is a centred Gaussian \(H\)-valued random variable, Gaussian moment equivalence yields
+\[
+ \sup_{s,\widetilde\theta,\sigma}
+ \E\hnorm{Y_{\gamma}^{\widetilde\theta}(s)}^p<\infty.
+\]
+Hence
+\[
+ \sup_{\widetilde\theta,\sigma}
+ \E\norm{Y_{\gamma}^{\widetilde\theta}}_{L^p(0,T;H)}^p<\infty.
+\]
+
+The stochastic-convolution factorisation identity gives
+\begin{equation}\label{eq:factor}
+ \Lambdaop^\alpha Z_t^{\widetilde\theta}
+ =c_\gamma\int_0^t
+ (t-s)^{\gamma-1}S_{\widetilde\theta}(t-s)
+ Y_{\gamma}^{\widetilde\theta}(s)\,ds,
+ \qquad
+ c_\gamma=\frac{\sin(\pi\gamma)}{\pi}.
+\end{equation}
+The required stochastic Fubini interchange is justified by the preceding square-integrability estimate.  Let \(p'=p/(p-1)\).  Since \(\gamma>1/p\),
+\[
+ \int_0^T r^{(\gamma-1)p'}\,dr<\infty.
+\]
+H\"older's inequality and the contraction property therefore imply
+\[
+ \sup_{t\le T}\hnorm{\Lambdaop^\alpha Z_t^{\widetilde\theta}}
+ \le C_{\gamma,p,T}
+ \norm{Y_{\gamma}^{\widetilde\theta}}_{L^p(0,T;H)}.
+\]
+Taking \(p\)-th moments proves a uniform \(L^p(\Omega;C([0,T];H))\) bound for \(\Lambdaop^\alpha Z^{\widetilde\theta}\).  The same representation supplies continuity.  Adding the deterministic term and using \(p>2\) proves \eqref{eq:maximal}.
+\end{proof}
+
+\paragraph{Burden-bearing assumption.}
+The extra exponent \(\delta\) creates room to choose a factorisation exponent \(\gamma>0\).  Without such room, fixed-time fractional moments need not upgrade to the maximal path norm used in the projection-rate argument.
+
+\begin{theorem}[Uniform pathwise Galerkin rate]\label{thm:path}
+Under Assumptions~\ref{ass:spectral}, \ref{ass:parameters}, and \ref{ass:strong}, there is a finite constant \(C_{\mathrm{path}}\), independent of \(K\) and \(\widetilde\theta\), such that
+\begin{equation}\label{eq:pathrate}
+ \sup_{\widetilde\theta\in\ThetaI,\,\sigma\in\Sigma}
+ \E\sup_{0\le t\le T}
+ \hnorm{U_t^{\widetilde\theta}-P_KU_t^{\widetilde\theta}}^2
+ \le
+ C_{\mathrm{path}}\lambda_{K+1}^{-2\alpha}.
+\end{equation}
+Consequently,
+\[
+ \sup_{\widetilde\theta,\sigma}
+ \E\cnorm{U^{\widetilde\theta}-P_KU^{\widetilde\theta}}^2
+ \longrightarrow0.
+\]
+\end{theorem}
+
+\begin{proof}
+For every \(x\in D(\Lambdaop^\alpha)\), spectral calculus gives
+\[
+ \hnorm{(I-P_K)x}^2
+ =\sum_{k>K}|x_k|^2
+ \le\lambda_{K+1}^{-2\alpha}
+ \sum_{k>K}\lambda_k^{2\alpha}|x_k|^2
+ \le\lambda_{K+1}^{-2\alpha}\hnorm{\Lambdaop^\alpha x}^2.
+\]
+Apply this pointwise to \(U_t^{\widetilde\theta}\), take the supremum over \(t\), expectation, and then the supremum over the parameter class.  Lemma~\ref{lem:maximal} supplies the uniform constant.
+\end{proof}
+
+\section{Main causal-semantics theorem}
+
+\begin{theorem}[SPDE intervention as the limit of intervened Galerkin SCMs]\label{thm:semantics}
+Under Assumptions~\ref{ass:spectral}, \ref{ass:parameters}, and \ref{ass:strong}, let \(\pi_K\) be any deterministic partition of \([0,T]\) for each \(K\).  Then
+\begin{equation}\label{eq:mainsem}
+ \sup_{\widetilde\theta\in\ThetaI,\,\sigma\in\Sigma}
+ \E\cnorm{
+ \mathcal X^{K,do(\theta=\widetilde\theta),\pi_K}
+ -U^{\widetilde\theta}
+ }^2
+ \le C_{\mathrm{path}}\lambda_{K+1}^{-2\alpha}
+ \longrightarrow0.
+\end{equation}
+At every finite \(K\), the intervention changes only the operator-dependent structural mechanism and preserves the same realised Brownian segments.  Thus the post-intervention SPDE is the \(L^2(\Omega;C([0,T];H))\) limit of modular interventions on finite-dimensional structural models.
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:exact} identifies the intervened structural path with \(P_KU^{\widetilde\theta}\) exactly, for every partition.  Theorem~\ref{thm:path} then gives \eqref{eq:mainsem}.
+\end{proof}
+
+\paragraph{Scope.}
+The theorem establishes intervention semantics, not identification.  It explains what the counterfactual object means under a declared invariance of \(u_0,Q,\sigma,W\), and the observation functional.  Whether the law of this object is determined by factual observations is a separate statistical question.
+
+\section{Field-functional and law convergence}
+
+For deterministic \(w\in L^2(0,T;H)\), define
+\[
+ \Psi_w(x)=\int_0^T\ip{w_t}{x_t}\,dt,
+ \qquad
+ \mathcal W_R=\{w:\norm{w}_{L^2(0,T;H)}\le R\}.
+\]
+
+\begin{corollary}[Uniform field-functional convergence]\label{cor:functional}
+Under Assumptions~\ref{ass:spectral}--\ref{ass:baseline}, for every finite \(R\),
+\begin{align}
+ &\sup_{\widetilde\theta\in\ThetaI,\,\sigma\in\Sigma,\,w\in\mathcal W_R}
+ \E\left|
+ \Psi_w(U^{\widetilde\theta})
+ -\Psi_w(P_KU^{\widetilde\theta})
+ \right|^2
+ \le R^2B_K
+ \longrightarrow0,\label{eq:functionalbound}
+\end{align}
+where \(B_K\) is defined in \eqref{eq:BK}.
+\end{corollary}
+
+\begin{proof}
+Cauchy--Schwarz in time gives
+\[
+ |\Psi_w(U)-\Psi_w(P_KU)|^2
+ \le \norm{w}_{L^2(0,T;H)}^2
+ \int_0^T\hnorm{(I-P_K)U_t}^2\,dt.
+\]
+Take expectations and apply Theorem~\ref{thm:integrated}.
+\end{proof}
+
+\begin{corollary}[Uniform quadratic-Wasserstein convergence]\label{cor:wasserstein}
+Under the assumptions of Corollary~\ref{cor:functional},
+\begin{equation}\label{eq:w2}
+ \sup_{\widetilde\theta,\sigma,w\in\mathcal W_R}
+ \Wass\!\left(
+ \Law(\Psi_w(U^{\widetilde\theta})),
+ \Law(\Psi_w(P_KU^{\widetilde\theta}))
+ \right)
+ \le R\sqrt{B_K}
+ \longrightarrow0.
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Use the common-Wiener coupling already built into the structural model.  For any coupling \((X,Y)\), \(\Wass^2(\Law(X),\Law(Y))\le\E|X-Y|^2\).  Apply Corollary~\ref{cor:functional}.
+\end{proof}
+
+\begin{corollary}[Uniform CDF convergence under non-degeneracy]\label{cor:cdf}
+Let \(\mathcal W_\star\subset\mathcal W_R\) satisfy the uniform non-degeneracy condition
+\[
+ \inf_{\widetilde\theta\in\ThetaI,\,\sigma\in\Sigma,\,w\in\mathcal W_\star}
+ \operatorname{Var}\bigl(\Psi_w(U^{\widetilde\theta})\bigr)
+ \ge v_\star>0.
+\]
+Then
+\[
+ \sup_{\widetilde\theta,\sigma,w\in\mathcal W_\star,z\in\R}
+ \left|
+ \Pp\{\Psi_w(P_KU^{\widetilde\theta})\le z\}
+ -\Pp\{\Psi_w(U^{\widetilde\theta})\le z\}
+ \right|
+ \longrightarrow0.
+\]
+\end{corollary}
+
+\begin{proof}
+Every full target is Gaussian with density bounded uniformly by
+\(M=(2\pi v_\star)^{-1/2}\).  Under the common-noise coupling, for every \(\varepsilon>0\),
+\[
+ \sup_z|F_K(z)-F(z)|
+ \le \frac{\E|X_K-X|}{\varepsilon}+2M\varepsilon.
+\]
+Optimising in \(\varepsilon\) and using \(\E|X_K-X|\le(\E|X_K-X|^2)^{1/2}\), uniformly controlled by \eqref{eq:functionalbound}, proves the claim.
+\end{proof}
+
+\begin{remark}[Why non-degeneracy is necessary]
+Quadratic-Wasserstein convergence alone does not imply uniform CDF convergence at degenerate limits.  For example, centred Gaussians with variances tending to zero converge in \(\mathsf W_2\) to a point mass, but their CDFs do not converge uniformly at the atom.  Hence a class containing \(w=0\) cannot support the stated uniform Kolmogorov conclusion without qualification.
+\end{remark}
+
+\section{Exact flow versus approximate numerical flow}
+
+The exact structural model above has no time-discretisation error.  A practical numerical recursion may replace \(\mathfrak G\) by an approximate measurable map.  The following result isolates the additional assumption needed for such a replacement.
+
+\begin{proposition}[Numerical-SCM transfer principle]\label{prop:numerical}
+Let \(\widehat{\mathcal X}^{K,\Delta,\widetilde\theta}\) be an approximate structural path built from the same initial state and the same Brownian segments as the exact Galerkin SCM.  Suppose that, for some \(\kappa>0\),
+\begin{equation}\label{eq:numass}
+ \sup_{K\ge1}\sup_{\widetilde\theta\in\ThetaI,\,\sigma\in\Sigma}
+ \E\cnorm{
+ \widehat{\mathcal X}^{K,\Delta,\widetilde\theta}
+ -\mathcal X^{K,do(\theta=\widetilde\theta),\pi_\Delta}
+ }^2
+ \le C_{\mathrm{num}}\Delta^{2\kappa}.
+\end{equation}
+Then, under Assumption~\ref{ass:strong},
+\begin{equation}\label{eq:totalnum}
+ \sup_{\widetilde\theta,\sigma}
+ \E\cnorm{
+ \widehat{\mathcal X}^{K,\Delta,\widetilde\theta}
+ -U^{\widetilde\theta}
+ }^2
+ \le
+ 2C_{\mathrm{path}}\lambda_{K+1}^{-2\alpha}
+ +2C_{\mathrm{num}}\Delta^{2\kappa}.
+\end{equation}
+The analogous field-functional and Wasserstein bounds follow by Cauchy--Schwarz and the common-noise coupling.
+\end{proposition}
+
+\begin{proof}
+Insert the exact Galerkin structural path between the numerical path and the SPDE path, apply \((a+b)^2\le2a^2+2b^2\), then use \eqref{eq:numass} and Theorem~\ref{thm:semantics}.
+\end{proof}
+
+\begin{remark}[What is and is not proved by Proposition~\ref{prop:numerical}]
+The proposition is a transfer theorem.  It does not assign a universal value of \(\kappa\) to every scheme.  Such a claim would be false without scheme-specific stability and noise-regularity assumptions.  Explicit Euler additionally requires a coupling such as
+\[
+ \Delta\,\thetamax\lambda_K<2
+\]
+for deterministic modal stability, so a \(K\)-uniform temporal constant cannot be asserted at fixed \(\Delta\).  An exponential integrator that samples each exact stochastic-convolution increment is exact at grid points in the present additive diagonal model; the Brownian-segment construction is exact throughout each interval.  Rates for increment-based exponential Euler, implicit Euler, and related schemes should be verified separately in the numerical work package.
+\end{remark}
+
+\section{Heat-equation specialisation}
+
+\begin{corollary}[Dirichlet heat equation on \((0,1)\)]\label{cor:heat}
+Let \(A_0=\Delta\) with Dirichlet boundary conditions on \((0,1)\), so \(\lambda_k=\pi^2k^2\).  Suppose
+\[
+ q_k^2\lesssim\lambda_k^{-\beta}.
+\]
+Then Assumption~\ref{ass:strong} holds whenever
+\[
+ \alpha+\delta<\frac14+\frac\beta2,
+ \qquad
+ u_0\in D((-\Delta)^\alpha).
+\]
+For space--time white noise, \(q_k\equiv1\), this becomes
+\[
+ \alpha+\delta<\frac14.
+\]
+Under these conditions, the pathwise Galerkin error obeys
+\[
+ \sup_{\widetilde\theta,\sigma}
+ \E\sup_{t\le T}
+ \hnorm{U_t^{\widetilde\theta}-P_KU_t^{\widetilde\theta}}^2
+ \lesssim K^{-4\alpha}.
+\]
+\end{corollary}
+
+\begin{proof}
+The summability exponent is
+\[
+ q_k^2\lambda_k^{2(\alpha+\delta)-1}
+ \lesssim
+ k^{2(2(\alpha+\delta)-1-\beta)}.
+\]
+The series converges precisely under
+\(2(2(\alpha+\delta)-1-\beta)<-1\), which is the displayed condition.  Since \(\lambda_{K+1}^{-2\alpha}\asymp K^{-4\alpha}\), Theorem~\ref{thm:path} gives the rate.
+\end{proof}
+
+\section{Audit conclusions and change log}
+
+Relative to the preceding WP1 note, the theorem package makes the following corrections.
+
+\begin{enumerate}[leftmargin=2em]
+\item \textbf{The structural It\^o map is now explicit and continuous.}
+The notation \(e\mapsto\int e^{-a(r-s)}de(s)\) has been replaced by the ordinary path functional \eqref{eq:Iar}.  Semimartingale integration by parts proves equality with the It\^o integral on Brownian paths.
+
+\item \textbf{Fixed-time and maximal regularity are separated.}
+The boundary series \(\sum q_k^2\lambda_k^{2\alpha-1}\) is not used to justify a supremum-in-time fractional moment.  The main path theorem assumes a positive factorisation margin \(\delta>0\).
+
+\item \textbf{The artificial restriction \(\alpha<1/2\) is removed.}
+The abstract linear theorem permits any \(\alpha>0\) for which the summability condition holds.  Concrete noises and spatial dimensions determine the feasible range; white noise in one spatial dimension gives \(\alpha+\delta<1/4\).
+
+\item \textbf{Exact and numerical time stepping are no longer conflated.}
+The exact Brownian-segment recursion equals the Galerkin SPDE for every partition and has no \(\Delta\)-error.  Temporal error appears only after an approximate local map is introduced.
+
+\item \textbf{The numerical rate is conditional on a verified scheme-specific bound.}
+No universal \(\Delta^{2\kappa}\) rate is claimed for Euler or exponential Euler without stability and regularity hypotheses.
+
+\item \textbf{Field-functional convergence uses the weaker integrated theorem.}
+The functional and \(\mathsf W_2\) conclusions do not require the stronger pathwise maximal estimate.
+
+\item \textbf{Uniform CDF convergence is qualified by variance non-degeneracy.}
+A bounded \(L^2\)-ball contains zero and arbitrarily small weights, so a uniform Kolmogorov result over that entire ball would be invalid at degenerate limits.
+
+\item \textbf{The conceptual boundary is explicit.}
+Structural semantics, statistical identification, estimation, and numerical approximation remain distinct claims.
+\end{enumerate}
+
+\section*{Literature position}
+
+The factorisation argument follows the classical regularity programme for stochastic convolutions initiated by Da Prato, Kwapie\'n, and Zabczyk.  Modern maximal-inequality and pathwise-uniform numerical results provide broader settings and sharper scheme-specific conclusions.  The intervention construction is aligned with the finite-SDE principle of relating a post-intervention stochastic equation to limits of intervened structural equation models.  The contribution developed here is the explicit Galerkin-to-SPDE operator-intervention link, with primitive common noise and law-level field-functional consequences.
+
+\begin{thebibliography}{9}
+
+\bibitem{DPKZ1987}
+G.~Da Prato, S.~Kwapie\'n, and J.~Zabczyk,
+``Regularity of solutions of linear stochastic equations in Hilbert spaces'',
+\emph{Stochastics}, 23 (1987), 1--23.
+
+\bibitem{DPZ2014}
+G.~Da Prato and J.~Zabczyk,
+\emph{Stochastic Equations in Infinite Dimensions}, 2nd ed.,
+Cambridge University Press, 2014.
+
+\bibitem{SokolHansen2014}
+A.~Sokol and N.~R. Hansen,
+``Causal interpretation of stochastic differential equations'',
+\emph{Electronic Journal of Probability}, 19 (2014), no.~100, 1--24.
+
+\bibitem{VeraarWeis2011}
+M.~Veraar and L.~Weis,
+``A note on maximal estimates for stochastic convolutions'',
+\emph{Czechoslovak Mathematical Journal}, 61 (2011), 743--758.
+
+\bibitem{vanNeervenVeraar2022}
+J.~van Neerven and M.~Veraar,
+``Maximal inequalities for stochastic convolutions and pathwise uniform convergence of time discretisation schemes'',
+\emph{Stochastics and Partial Differential Equations: Analysis and Computations}, 10 (2022), 516--581.
+
+\bibitem{KliobaVeraar2025}
+K.~Klioba and M.~Veraar,
+``Pathwise uniform convergence of time discretisation schemes for SPDEs'',
+\emph{IMA Journal of Numerical Analysis}, 45 (2025), 2060--2131.
+
+\end{thebibliography}
+
+\end{document}

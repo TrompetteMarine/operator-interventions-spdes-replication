@@ -1,0 +1,55 @@
+% Closure of wp5 lem:block  [drafted v2 — author line-check required]
+\closuredraft
+\begin{proof}
+Fix $k\le N$ and write the mode-$k$ score block at the truth as
+$S_{k}=\sum_{j<n}d_{k,j}$, $d_{k,j}=(s_{\theta,k,j},s_{\sigma,k,j})^\top$,
+a two-dimensional martingale difference sequence with respect to the mode-$k$
+filtration, with (Step 1 of the proof of Lemma~\ref{wp3:lem:score-clt})
+\[
+ s_{\theta,k,j}
+ =-\frac{\lambda_k\Delta_n\rho_kY_{k,j}}{\sqrt{v_k}}\varepsilon_{k,j}
+ +\frac{g_k}{2}(\varepsilon^2_{k,j}-1),
+ \qquad
+ s_{\sigma,k,j}=\frac{1}{\sigma_0}(\varepsilon^2_{k,j}-1).
+\]
+\emph{Fourth moments per block.} By Rosenthal's inequality for martingales,
+for each coordinate $a\in\{\theta,\sigma\}$,
+\[
+ \E\,S_{k,a}^4
+ \le C\Big[\Big(\sum_{j<n}\E\,d_{k,j,a}^2\Big)^2
+ +\sum_{j<n}\E\,d_{k,j,a}^4\Big].
+\]
+For $a=\theta$: $\sum_j\E d^2\le CT\lambda_k$ (information computation,
+Part S3) and, by the moment bounds in the proof of Lemma~\ref{wp3:lem:score-clt},
+$\sum_j\E d^4\le C\big(n\lambda_k^2\Delta_n^2
++\lambda_k^2\Delta_n(\lambda_ku_{0,k}^2/q_k^2)^2\cdot\Delta_n\big)
+\le CT\lambda_k\cdot\lambda_k\Delta_n(1+(\lambda_ku_{0,k}^2/q_k^2)^2/n)$,
+so $\E S_{k,\theta}^4\le C\lambda_k^2\big(1+o(1)+u\text{-terms}\big)$ with the
+$u_0$-terms summable to $o(\LamN^2)$ exactly as in the score-CLT closure.
+For $a=\sigma$: $\sum_j\E d^2=2n/\sigma_0^2$ and $\sum_j\E d^4\le Cn$, so
+$\E S_{k,\sigma}^4\le Cn^2$. Hence, with
+$\Dmat=\diag(\LamN^{-1/2},(Nn)^{-1/2})$ and Cauchy--Schwarz for the mixed
+coordinates,
+\[
+ \sum_{k\le N}\E\norm{\Dmat S_k}^4
+ \le C\Big\{\frac{\sum_k\lambda_k^2}{\LamN^2}
+ +\frac{Nn^2}{(Nn)^2}
+ +\Big(\frac{\sum_k\lambda_k^2}{\LamN^2}\Big)^{1/2}
+ \Big(\frac{Nn^2}{(Nn)^2}\Big)^{1/2}\Big\}+o(1)
+ \le C\Big(\frac{\lambda_N}{\LamN}+\frac1N
+ +(\lambda_N\Delta_n)^2\Big)+o(1),
+\]
+using $\sum_k\lambda_k^2\le\lambda_N\LamN$ and absorbing the cross term with
+$2ab\le a^2+b^2$; this is \eqref{eq:block-fourth}.
+
+\emph{Maximum.} For $\delta>0$,
+$\Pp(\max_k\norm{\Dmat S_k}\ge\delta)
+\le\delta^{-4}\sum_k\E\norm{\Dmat S_k}^4\to0$, giving \eqref{eq:max-block}.
+
+\emph{Outer product.} The blocks are independent across $k$ with
+$\sum_k\E[\Dmat S_kS_k^\top\Dmat]=\Dmat I_{N,n}(\vzero)\Dmat\to J(\vzero)$
+(Theorem~\ref{wp3:thm:info-limit}). Each entry of the centred sum
+$\sum_k\{\Dmat S_kS_k^\top\Dmat-\E[\cdot]\}$ has variance bounded by
+$\sum_k\E\norm{\Dmat S_k}^4\to0$, so \eqref{eq:opg-true} follows by
+Chebyshev.
+\end{proof}

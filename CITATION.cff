@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the working paper."
+title: "Operator Interventions in Linear SPDEs: Galerkin Structural Semantics, Mixed-Rate Local Asymptotic Normality, and Uniform Inference for Post-Intervention Laws"
+type: software
+authors:
+  - family-names: Bontemps
+    given-names: Gabriel Lucas Stéphane
+    affiliation: "GREDEG-CNRS, Université Côte d'Azur, Nice, France; Adaptive Decision Lab, University of Oxford, Oxford, United Kingdom"
+version: v1.0-wp
+date-released: 2026-07-09
+license: MIT
+notes: "Funded by a DS4H (Digital Systems for Humans) fellowship, Université Côte d'Azur. A release DOI can be added after archival deposition."

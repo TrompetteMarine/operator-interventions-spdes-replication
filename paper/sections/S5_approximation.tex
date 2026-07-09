@@ -1,0 +1,43 @@
+\section{Approximation proofs and rate allocation}
+
+The mean tail follows from Cauchy--Schwarz and
+\[
+ \int_0^Te^{-2a\lambda_kt}dt\le\frac1{2\underline a\lambda_k}.
+\]
+Combining $u_0\in D((-A_0)^{r_0/2})$ with the weight ellipsoid yields
+\[
+ \sum_{k>K}\abs{u_{0,k}}\norm{w_k}_{L^2}\lambda_k^{-1/2}
+ \lesssim\lambda_{K+1}^{-(r_0+1+2s)/2}.
+\]
+The covariance tail uses the transfer bound
+\[
+ \int_0^Tg_{a,k,w}(s)^2ds
+ \lesssim\lambda_k^{-2}\norm{w_k}_{L^2}^2,
+\]
+leading to exponent $\beta+2+2s$.
+
+For centred normal laws,
+\[
+ W_2^2(N(m,v),N(\widetilde m,\widetilde v))
+ =(m-\widetilde m)^2+(\sqrt v-\sqrt{\widetilde v})^2.
+\]
+If $v,\widetilde v\ge v_*>0$,
+\[
+ \abs{\sqrt v-\sqrt{\widetilde v}}
+ \le\frac{\abs{v-\widetilde v}}{2\sqrt{v_*}}.
+\]
+The same linear variance-tail dependence follows for normal CDFs and compact quantiles by smoothness.
+
+For exact modal dynamics, temporal approximation is most efficiently placed on the deterministic weight. If $\Pi_\delta w$ is a temporal projection with
+\[
+ \norm{w-\Pi_\delta w}_{L^2}\lesssim\delta^\eta,
+\]
+then boundedness of the covariance operator of $U$ gives
+\[
+ \norm{\Psi_w(U_K)-\Psi_{\Pi_\delta w}(U_K)}_{L^2(\Omega)}
+ \lesssim\delta^\eta.
+\]
+
+The total-error decomposition is an application of the triangle inequality followed by the uniform delta method. The local-bias trichotomy follows from the behaviour of $R_fb_{K,\delta,M}$.
+
+For a cost $K^\zeta\delta^{-\xi}M^\upsilon$ and additive numerical bias budget, Lagrange multipliers allocate bias shares in proportion to $\zeta/\rho_F$, $\xi/\kappa$, and $\upsilon/\rho_A$.

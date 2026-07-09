@@ -1,0 +1,754 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{enumitem}
+\usepackage{booktabs,tabularx,array}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{definition}[assumption]{Definition}
+\newtheorem{proposition}[assumption]{Proposition}
+\newtheorem{theorem}[assumption]{Theorem}
+\newtheorem{lemma}[assumption]{Lemma}
+\newtheorem{corollary}[assumption]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[assumption]{Remark}
+\newtheorem{example}[assumption]{Example}
+
+\newcommand{\E}{\mathbb E}
+\newcommand{\Pp}{\mathbb P}
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\op}{\mathrm{o}_{\Pp}}
+\newcommand{\Op}{\mathrm{O}_{\Pp}}
+\newcommand{\1}{\mathbf 1}
+\newcommand{\elln}{\ell_{N,n}}
+\newcommand{\LamN}{\Lambda_N}
+\newcommand{\Dn}{D_{N,n}}
+\newcommand{\An}{A_{N,n}}
+\newcommand{\vart}{\vartheta}
+\newcommand{\vzero}{\vartheta_0}
+\newcommand{\trans}{\mathsf T}
+
+\title{Work Package 3: LAN and Efficient Estimation for Spectrally Observed Linear SPDEs\\
+\large Exact discrete likelihood, mixed information rates, efficient MLE, and moment convergence}
+\author{}
+\date{6 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note develops the statistical experiment required by the operator-intervention SPDE programme.  The first $N$ Fourier modes of a diagonal linear parabolic SPDE are observed at $n+1$ equally spaced times over a fixed horizon.  Because each mode is an exactly sampled Ornstein--Uhlenbeck process, the conditional likelihood is explicit.  We derive the exact score and Fisher information for the jointly unknown diffusivity $\theta$ and common noise scale $\sigma$.  Under the single resolution condition $\lambda_N\Delta_n\to0$, spectral no-dominance, and a mild initial-energy condition, the experiment is locally asymptotically normal with the mixed normalisation
+\[
+ \diag\!\left(\sqrt{\sum_{k\le N}\lambda_k},\sqrt{Nn}\right).
+\]
+The limiting information is diagonal: drift information is $T/(2\theta_0)$ and scale information is $2/\sigma_0^2$.  The exact conditional MLE is consistent, asymptotically normal, regular, and efficient; its normalised errors are asymptotically independent.  A polynomial-type likelihood-ratio bound gives convergence of polynomial moments.  For the one-dimensional Dirichlet heat equation, the drift rate is $N^{3/2}$ and the scale rate is $\sqrt{Nn}$, with the sampling requirement $N^2/n\to0$.  The note also records a necessary correction to the next empirical-process work package: fixed-intervention laws are $\sigma$-only targets and inherit the fast $\sqrt{Nn}$ rate, whereas factual or distributional-effect targets involving $\theta$ inherit the slower spectral rate.
+\end{abstract}
+
+\section{Statistical experiment}
+
+Let $H=L^2(D)$, and let $A_0$ be self-adjoint, negative, and have compact resolvent.  Write
+\[
+ A_0e_k=-\lambda_ke_k,
+ \qquad 0<\lambda_1\le\lambda_2\le\cdots,
+\]
+for an orthonormal eigenbasis.  The factual SPDE is
+\begin{equation}\label{eq:spde}
+ dU_t=\theta A_0U_t\,dt+\sigma Q^{1/2}dW_t,
+ \qquad U_0=u_0,
+\end{equation}
+where
+\[
+ Q^{1/2}e_k=q_ke_k,
+ \qquad q_k>0,
+\]
+and $u_0$ and $(q_k)$ are known.  The unknown parameter is
+\[
+ \vart=(\theta,\sigma)\in\Theta
+ :=[\underline\theta,\overline\theta]
+ \times[\underline\sigma,\overline\sigma]
+ \Subset(0,\infty)^2.
+\]
+The true value $\vzero=(\theta_0,\sigma_0)$ lies in the interior of $\Theta$.
+
+The Fourier coordinates solve independent Ornstein--Uhlenbeck equations,
+\begin{equation}\label{eq:mode}
+ du_k(t)=-\theta\lambda_ku_k(t)\,dt+\sigma q_kd\beta_k(t),
+ \qquad u_k(0)=u_{0,k}.
+\end{equation}
+Fix $T>0$, let $\Delta_n=T/n$, and observe
+\[
+ Y_{k,j}=u_k(j\Delta_n),
+ \qquad k=1,\ldots,N,
+ \quad j=0,\ldots,n.
+\]
+The initial values are deterministic and therefore contribute no density.  The experiment is
+\[
+ \mathcal E_{N,n}
+ =\left(\mathcal X_{N,n},\mathcal A_{N,n},
+ \{P_{\vart}^{N,n}:\vart\in\Theta\}\right).
+\]
+
+For $k\le N$, define
+\begin{align}
+ \rho_{k,n}(\theta)
+ &:=e^{-\theta\lambda_k\Delta_n},\label{eq:rho}\\
+ h_{k,n}(\theta)
+ &:=\frac{1-e^{-2\theta\lambda_k\Delta_n}}
+ {2\theta\lambda_k},\label{eq:h}\\
+ v_{k,n}(\vart)
+ &:=\sigma^2q_k^2h_{k,n}(\theta).\label{eq:v}
+\end{align}
+Then
+\begin{equation}\label{eq:transition}
+ Y_{k,j+1}\mid\mathcal F_{k,j}
+ \sim\mathcal N\!\left(
+ \rho_{k,n}(\theta)Y_{k,j},
+ v_{k,n}(\vart)
+ \right),
+\end{equation}
+where $\mathcal F_{k,j}$ contains the past of mode $k$.  The standardised innovations
+\begin{equation}\label{eq:eps}
+ \varepsilon_{k,j}(\vart)
+ :=\frac{Y_{k,j+1}-\rho_{k,n}(\theta)Y_{k,j}}
+ {\sigma q_k\sqrt{h_{k,n}(\theta)}}
+\end{equation}
+are independent standard normals at the true parameter.
+
+\section{Exact likelihood and profile MLE}
+
+Set
+\[
+ r_{k,j}(\theta)
+ :=Y_{k,j+1}-\rho_{k,n}(\theta)Y_{k,j}.
+\]
+Up to an additive constant, the exact conditional log-likelihood is
+\begin{equation}\label{eq:loglik}
+ \elln(\theta,\sigma)
+ =-\frac12\sum_{k=1}^N\sum_{j=0}^{n-1}
+ \left\{
+ \log\big(\sigma^2q_k^2h_{k,n}(\theta)\big)
+ +\frac{r_{k,j}(\theta)^2}
+ {\sigma^2q_k^2h_{k,n}(\theta)}
+ \right\}.
+\end{equation}
+
+\begin{proposition}[Exact profile likelihood]\label{prop:profile}
+For fixed $\theta$, the unconstrained maximiser in $\sigma^2$ is
+\begin{equation}\label{eq:profile-sigma}
+ \widehat\sigma_{N,n}^2(\theta)
+ =\frac1{Nn}\sum_{k=1}^N\sum_{j=0}^{n-1}
+ \frac{r_{k,j}(\theta)^2}{q_k^2h_{k,n}(\theta)}.
+\end{equation}
+Consequently, an exact conditional MLE is obtained from
+\begin{align}
+ \widehat\theta_{N,n}
+ &\in\arg\min_{\theta\in[\underline\theta,\overline\theta]}
+ \left\{
+ Nn\log\widehat\sigma_{N,n}^2(\theta)
+ +n\sum_{k=1}^N\log h_{k,n}(\theta)
+ \right\},\label{eq:profile-theta}\\
+ \widehat\sigma_{N,n}
+ &=\widehat\sigma_{N,n}(\widehat\theta_{N,n}),\label{eq:profile-final}
+\end{align}
+with projection to the compact scale interval when necessary.  Since $\vzero$ is interior, that projection is inactive with probability tending to one.
+\end{proposition}
+
+\begin{proof}
+Differentiate \eqref{eq:loglik} with respect to $\sigma^2$.  The score equation is linear in $1/\sigma^2$ and gives \eqref{eq:profile-sigma}.  Substitution into \eqref{eq:loglik} removes constants and terms independent of $\theta$, yielding \eqref{eq:profile-theta}.
+\end{proof}
+
+\paragraph{Why exact transitions matter.}
+An Euler least-squares estimator replaces $\rho_{k,n}(\theta)$ by $1-\theta\lambda_k\Delta_n$.  Its deterministic centring error is typically of order
+$\Delta_n\sum_{k\le N}\lambda_k^2/\sum_{k\le N}\lambda_k$, hence of order $\lambda_N\Delta_n$.  Root-information centring would then require a stronger undersmoothing condition.  The exact likelihood has no such approximation bias; $\lambda_N\Delta_n\to0$ is used only to identify the continuous-time information limit and asymptotic orthogonality.
+
+\section{Score and exact Fisher information}
+
+Define
+\begin{equation}\label{eq:g}
+ g_{k,n}(\theta)
+ :=\partial_\theta\log h_{k,n}(\theta)
+ =\frac{2\lambda_k\Delta_n}
+ {e^{2\theta\lambda_k\Delta_n}-1}
+ -\frac1\theta.
+\end{equation}
+Also,
+\begin{equation}\label{eq:rho-derivative}
+ \dot\rho_{k,n}(\theta)
+ =-\lambda_k\Delta_n\rho_{k,n}(\theta).
+\end{equation}
+For one transition, evaluated at a generic parameter,
+\begin{align}
+ s_{\theta,k,j}(\vart)
+ &=\frac{r_{k,j}(\theta)\dot\rho_{k,n}(\theta)Y_{k,j}}
+ {v_{k,n}(\vart)}
+ +\frac12\left(
+ \frac{r_{k,j}(\theta)^2}{v_{k,n}(\vart)}-1
+ \right)g_{k,n}(\theta),\label{eq:score-theta}\\
+ s_{\sigma,k,j}(\vart)
+ &=\frac1\sigma\left(
+ \frac{r_{k,j}(\theta)^2}{v_{k,n}(\vart)}-1
+ \right).\label{eq:score-sigma}
+\end{align}
+At $\vzero$, these are martingale differences.  The term in the first line proportional to $\varepsilon_{k,j}$ is the transition-mean score; the centred-square term is the transition-variance score.
+
+\begin{proposition}[Exact information matrix]\label{prop:exact-info}
+Let
+\begin{equation}\label{eq:M}
+ M_{N,n}(\vart)
+ :=\sum_{k=1}^N\sum_{j=0}^{n-1}
+ \frac{\dot\rho_{k,n}(\theta)^2\E_\vart[Y_{k,j}^2]}
+ {\sigma^2q_k^2h_{k,n}(\theta)}.
+\end{equation}
+Then the Fisher information based on the conditional likelihood is
+\begin{equation}\label{eq:info-exact}
+ I_{N,n}(\vart)
+ =\begin{pmatrix}
+ M_{N,n}(\vart)+\dfrac n2\sum_{k=1}^Ng_{k,n}(\theta)^2
+ &\dfrac n\sigma\sum_{k=1}^Ng_{k,n}(\theta)\\[2mm]
+ \dfrac n\sigma\sum_{k=1}^Ng_{k,n}(\theta)
+ &\dfrac{2Nn}{\sigma^2}
+ \end{pmatrix}.
+\end{equation}
+Moreover, with $\rho_k=\rho_{k,n}(\theta)$ and
+\[
+ A_{k,n}:=\sum_{j=0}^{n-1}\rho_k^{2j}
+ =\frac{1-\rho_k^{2n}}{1-\rho_k^2},
+\]
+we have the closed form
+\begin{equation}\label{eq:M-closed}
+ M_{N,n}(\vart)
+ =\sum_{k=1}^N
+ \frac{\lambda_k^2\Delta_n^2\rho_k^2}
+ {\sigma^2q_k^2h_{k,n}(\theta)}
+ \left\{
+ u_{0,k}^2A_{k,n}
+ +\frac{\sigma^2q_k^2}{2\theta\lambda_k}
+ (n-A_{k,n})
+ \right\}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+For a Gaussian observation with parameter-dependent mean $\mu$ and variance $v$, conditional Fisher information is
+\[
+ \frac{\partial_a\mu\,\partial_b\mu}{v}
+ +\frac12\partial_a\log v\,\partial_b\log v.
+\]
+Here $\partial_\theta\mu=\dot\rho_{k,n}Y_{k,j}$, $\partial_\sigma\mu=0$, $\partial_\theta\log v=g_{k,n}$, and $\partial_\sigma\log v=2/\sigma$, which gives \eqref{eq:info-exact}.  The second moment
+\[
+ \E_\vart Y_{k,j}^2
+ =\rho_k^{2j}u_{0,k}^2
+ +\frac{\sigma^2q_k^2}{2\theta\lambda_k}(1-\rho_k^{2j})
+\]
+then yields \eqref{eq:M-closed} after summing the geometric series.
+\end{proof}
+
+\section{Asymptotic regime and information geometry}
+
+Let
+\[
+ \LamN:=\sum_{k=1}^N\lambda_k.
+\]
+The local scale matrix and its inverse are
+\begin{equation}\label{eq:scales}
+ \Dn:=\diag\!\left(\LamN^{-1/2},(Nn)^{-1/2}\right),
+ \qquad
+ \An:=\Dn^{-1}.
+\end{equation}
+
+\begin{assumption}[Joint spectral high-frequency regime]\label{ass:regime}
+As $N,n\to\infty$ with $\Delta_n=T/n$:
+\begin{enumerate}[label=(\roman*)]
+ \item $\LamN\to\infty$ and $\lambda_N/\LamN\to0$;
+ \item $\lambda_N\Delta_n\to0$;
+ \item the known initial condition satisfies
+ \begin{equation}\label{eq:initial-negligible}
+ R_N(u_0,Q)
+ :=\sum_{k=1}^N\frac{\lambda_ku_{0,k}^2}{q_k^2}
+ =o(\LamN).
+ \end{equation}
+\end{enumerate}
+\end{assumption}
+
+Condition (i) prevents one Fourier coordinate from carrying a non-negligible fraction of total drift information.  Condition (ii) resolves the fastest observed relaxation time.  Condition (iii) excludes an initial deterministic signal whose information is of the same or larger order than the stochastic equilibrium contribution.  It holds for $u_0=0$ and under many weighted smoothness conditions.  If $R_N/\LamN$ has a positive finite limit, the same analysis holds with an additional deterministic term in the drift information; see Remark~\ref{rem:initial}.
+
+\begin{lemma}[Uniform small-mesh expansions]\label{lem:expansions}
+Under Assumption~\ref{ass:regime}, uniformly in $k\le N$ and $\theta\in[\underline\theta,\overline\theta]$,
+\begin{align}
+ h_{k,n}(\theta)
+ &=\Delta_n\{1-\theta\lambda_k\Delta_n
+ +O((\lambda_k\Delta_n)^2)\},\label{eq:h-exp}\\
+ g_{k,n}(\theta)
+ &=-\lambda_k\Delta_n
+ +\frac13\theta\lambda_k^2\Delta_n^2
+ +O(\lambda_k^4\Delta_n^4).\label{eq:g-exp}
+\end{align}
+In particular,
+\begin{align}
+ \frac n2\sum_{k=1}^Ng_{k,n}(\theta)^2
+ &=O\!\left(\Delta_n\sum_{k=1}^N\lambda_k^2\right)
+ =o(\LamN),\label{eq:variance-theta-small}\\
+ \frac n\sigma\sum_{k=1}^Ng_{k,n}(\theta)
+ &=-\frac T\sigma\LamN\{1+o(1)\}.
+ \label{eq:cross-exp}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+Apply Taylor expansion to $e^{-2\theta\lambda_k\Delta_n}$ and to
+$2x/(e^{2x}-1)$.  Uniformity follows from $\lambda_N\Delta_n\to0$.  Since
+$\sum\lambda_k^2\le\lambda_N\LamN$, the first information remainder is $o(\LamN)$.
+\end{proof}
+
+\begin{theorem}[Mixed Fisher-information limit]\label{thm:info-limit}
+Under Assumption~\ref{ass:regime},
+\begin{equation}\label{eq:info-limit}
+ \Dn I_{N,n}(\vzero)\Dn
+ \longrightarrow
+ J(\vzero)
+ :=\begin{pmatrix}
+ \dfrac{T}{2\theta_0}&0\\[2mm]
+ 0&\dfrac{2}{\sigma_0^2}
+ \end{pmatrix}.
+\end{equation}
+Thus the drift and scale information rates are, respectively,
+\[
+ \LamN
+ \qquad\text{and}\qquad
+ Nn.
+\]
+The asymptotic correlation vanishes because
+\begin{equation}\label{eq:cross-bound}
+ \frac{\LamN}{\sqrt{\LamN}\sqrt{Nn}}
+ =\sqrt{\frac{\LamN}{Nn}}
+ \le\sqrt{\frac{\lambda_N\Delta_n}{T}}
+ \longrightarrow0.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+By \eqref{eq:M-closed}, Riemann-sum approximation of each exact OU transition gives
+\[
+ M_{N,n}(\vzero)
+ =\sum_{k=1}^N\left\{
+ \frac{T\lambda_k}{2\theta_0}
+ -\frac{1-e^{-2\theta_0\lambda_kT}}{4\theta_0^2}
+ +\frac{\lambda_ku_{0,k}^2}{2\theta_0\sigma_0^2q_k^2}
+ (1-e^{-2\theta_0\lambda_kT})
+ \right\}
+ +o(\LamN).
+\]
+The middle sum is $O(N)=o(\LamN)$ because $\lambda_k\to\infty$ implies $\LamN/N\to\infty$ by Ces\`aro averaging.  The initial term is $o(\LamN)$ by \eqref{eq:initial-negligible}.  Hence $M_{N,n}/\LamN\to T/(2\theta_0)$.  Lemma~\ref{lem:expansions} makes the variance contribution to $I_{\theta\theta}$ negligible.  The scale entry is exact, and \eqref{eq:cross-bound} removes the normalised cross entry.
+\end{proof}
+
+\begin{remark}[Non-negligible known initial signal]\label{rem:initial}
+If
+\[
+ \LamN^{-1}\sum_{k\le N}\frac{\lambda_ku_{0,k}^2}{q_k^2}
+ \longrightarrow\chi_0\in(0,\infty),
+\]
+then the upper-left entry of $J$ becomes
+\[
+ \frac{T}{2\theta_0}
+ +\frac{\chi_0}{2\theta_0\sigma_0^2}.
+\]
+The initial condition adds information because it is known and its deterministic decay depends on $\theta$.  The zero-start or negligible-start formulation is retained as the main theorem because it isolates information generated by the stochastic field itself.
+\end{remark}
+
+\section{Central sequence and LAN}
+
+Let
+\[
+ S_{N,n}(\vzero)=\nabla_\vartheta\elln(\vzero),
+ \qquad
+ \Delta_{N,n}:=\Dn S_{N,n}(\vzero).
+\]
+
+\begin{lemma}[Score central limit theorem]\label{lem:score-clt}
+Under Assumption~\ref{ass:regime},
+\begin{equation}\label{eq:score-clt}
+ \Delta_{N,n}\Rightarrow\mathcal N_2(0,J(\vzero)).
+\end{equation}
+Moreover, the observed normalised information satisfies
+\begin{equation}\label{eq:observed-info}
+ -\Dn\nabla_\vartheta^2\elln(\vzero)\Dn
+ \overset{\Pp}{\longrightarrow}J(\vzero).
+\end{equation}
+\end{lemma}
+
+\begin{proof}[Proof structure]
+Order the innovations lexicographically in $(k,j)$.  Equations \eqref{eq:score-theta}--\eqref{eq:score-sigma} give a two-dimensional martingale-difference array.  Its predictable quadratic variation is the observed conditional information.  The deterministic scale and cross components converge by Theorem~\ref{thm:info-limit}.  For the random drift-mean component, independence across modes and the Gaussian covariance formula for integrated OU squares give variance $O(\LamN)$, so division by $\LamN^2$ yields concentration.  Fourth-moment bounds and
+\[
+ \frac{\lambda_N}{\LamN}\to0,
+ \qquad
+ \frac1{Nn}\to0,
+\]
+verify the conditional Lindeberg condition.  The martingale CLT proves \eqref{eq:score-clt}.  The Hessian differs from conditional information by a martingale term whose normalised second moment vanishes under the same bounds, giving \eqref{eq:observed-info}.
+\end{proof}
+
+\begin{lemma}[Uniform local quadratic remainder]\label{lem:remainder}
+For every compact $K\subset\R^2$,
+\begin{equation}\label{eq:remainder}
+ \sup_{h\in K}\left|
+ \elln(\vzero+\Dn h)-\elln(\vzero)
+ -h^\top\Delta_{N,n}
+ +\frac12h^\top J(\vzero)h
+ \right|
+ \overset{\Pp}{\longrightarrow}0.
+\end{equation}
+\end{lemma}
+
+\begin{proof}[Proof structure]
+A third-order Taylor expansion is valid uniformly on a fixed local set because $\Theta$ is bounded away from zero and the Gaussian transition density is smooth.  After standardisation by \eqref{eq:scales}, pure $\theta$ third-order terms are $o_{\Pp}(1)$ by spectral no-dominance, pure $\sigma$ terms are $O_{\Pp}((Nn)^{-1/2})$, and mixed terms are bounded by combinations of
+\[
+ \sqrt{\frac{\lambda_N}{\LamN}},
+ \qquad
+ \sqrt{\frac{\LamN}{Nn}},
+ \qquad
+ \lambda_N\Delta_n,
+ \qquad
+ (Nn)^{-1/2},
+\]
+all of which vanish.  Replacing the normalised Hessian at $\vzero$ by $J(\vzero)$ is justified by Lemma~\ref{lem:score-clt}.  This establishes compact-uniform local asymptotic quadraticity.
+\end{proof}
+
+\begin{theorem}[Local asymptotic normality]\label{thm:LAN}
+Under Assumption~\ref{ass:regime}, the sequence of experiments is LAN at every interior $\vzero$.  For each fixed $h\in\R^2$ such that $\vzero+\Dn h\in\Theta$ eventually,
+\begin{equation}\label{eq:LAN}
+ \log\frac{dP_{\vzero+\Dn h}^{N,n}}
+ {dP_{\vzero}^{N,n}}
+ =h^\top\Delta_{N,n}
+ -\frac12h^\top J(\vzero)h
+ +o_{P_{\vzero}^{N,n}}(1),
+\end{equation}
+where
+\[
+ \Delta_{N,n}\Rightarrow\mathcal N_2(0,J(\vzero)).
+\]
+The expansion is uniform for $h$ in compact subsets of $\R^2$.
+\end{theorem}
+
+\paragraph{Interpretation.}
+The exact discrete experiment converges locally to a two-coordinate Gaussian shift experiment.  The drift coordinate aggregates relaxation information across modes, while the scale coordinate aggregates innovation squares across every mode--time cell.  Their limiting orthogonality is not assumed; it is a consequence of resolving the highest observed frequency.
+
+\section{Consistency of the exact MLE}
+
+\begin{lemma}[Global Kullback--Leibler separation]\label{lem:KL}
+For every $\varepsilon>0$, there exist constants $c_\varepsilon>0$ and $N_\varepsilon$ such that, for $N,n\ge N_\varepsilon$,
+\begin{align}
+ \inf_{|\theta-\theta_0|\ge\varepsilon,\,\sigma\in[\underline\sigma,\overline\sigma]}
+ \E_{\vzero}\big[\elln(\vzero)-\elln(\theta,\sigma)\big]
+ &\ge c_\varepsilon\LamN,\label{eq:KL-theta}\\
+ \inf_{|\sigma-\sigma_0|\ge\varepsilon,\,\theta\in[\underline\theta,\overline\theta]}
+ \E_{\vzero}\big[\elln(\vzero)-\elln(\theta,\sigma)\big]
+ &\ge c_\varepsilon Nn.
+ \label{eq:KL-sigma}
+\end{align}
+\end{lemma}
+
+\begin{proof}[Proof structure]
+For one transition, conditional on $Y_{k,j}$, the expected log-likelihood loss is the Gaussian divergence
+\[
+ \frac12\left\{
+ \log\frac{v}{v_0}
+ +\frac{v_0+(\rho-\rho_0)^2Y_{k,j}^2}{v}-1
+ \right\}.
+\]
+Uniformly in the compact parameter set, $h_{k,n}(\theta)/\Delta_n=1+o(1)$ because $\lambda_N\Delta_n\to0$.  A scale discrepancy therefore produces an order-$Nn$ variance divergence.  If $|\theta-\theta_0|\ge\varepsilon$, then
+$|\rho_{k,n}(\theta)-\rho_{k,n}(\theta_0)|$ is uniformly comparable to $\varepsilon\lambda_k\Delta_n$; multiplying by the OU second moment and summing over time produces order $\varepsilon^2T\lambda_k$ for mode $k$, hence order $\LamN$ overall.  Compactness supplies uniform constants.
+\end{proof}
+
+\begin{theorem}[Consistency]\label{thm:consistency}
+Under Assumption~\ref{ass:regime}, every exact conditional MLE defined by Proposition~\ref{prop:profile} satisfies
+\begin{equation}\label{eq:consistency}
+ (\widehat\theta_{N,n},\widehat\sigma_{N,n})
+ \overset{\Pp}{\longrightarrow}(\theta_0,\sigma_0).
+\end{equation}
+\end{theorem}
+
+\begin{proof}[Proof structure]
+Lemma~\ref{lem:KL} gives deterministic separation outside every fixed neighbourhood of $\vzero$.  The centred likelihood field is a finite-dimensional smooth Gaussian-chaos field.  A covering argument over the compact parameter set, combined with martingale Bernstein bounds for transition scores, gives stochastic fluctuations $o_{\Pp}(\LamN)$ in drift-separated regions and $o_{\Pp}(Nn)$ in scale-separated regions.  Therefore no global maximiser can remain outside an arbitrary fixed neighbourhood of $\vzero$.
+\end{proof}
+
+\section{Efficient estimation}
+
+\begin{theorem}[Asymptotic linearity and mixed normal limit]\label{thm:MLE-CLT}
+Under Assumption~\ref{ass:regime},
+\begin{equation}\label{eq:linear-MLE}
+ \An(\widehat\vartheta_{N,n}-\vzero)
+ =J(\vzero)^{-1}\Delta_{N,n}+\op(1).
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:MLE-limit}
+ \begin{pmatrix}
+ \sqrt{\LamN}(\widehat\theta_{N,n}-\theta_0)\\[1mm]
+ \sqrt{Nn}(\widehat\sigma_{N,n}-\sigma_0)
+ \end{pmatrix}
+ \Rightarrow
+ \mathcal N_2\!\left(
+ 0,
+ \begin{pmatrix}
+ \dfrac{2\theta_0}{T}&0\\[2mm]
+ 0&\dfrac{\sigma_0^2}{2}
+ \end{pmatrix}
+ \right).
+\end{equation}
+The two normalised estimators are asymptotically independent.
+\end{theorem}
+
+\begin{proof}
+Consistency places the MLE in an interior shrinking neighbourhood with probability tending to one.  Expand the score equation around $\vzero$:
+\[
+ 0=S_{N,n}(\vzero)
+ +\nabla_\vartheta^2\elln(\widetilde\vartheta_{N,n})
+ (\widehat\vartheta_{N,n}-\vzero).
+\]
+Premultiply and postmultiply by the mixed scale matrices.  Lemmas~\ref{lem:score-clt} and \ref{lem:remainder} imply convergence of the normalised Hessian to $-J(\vzero)$ uniformly in the local neighbourhood.  Solving gives \eqref{eq:linear-MLE}; \eqref{eq:MLE-limit} follows from the score CLT.
+\end{proof}
+
+\begin{theorem}[LAN efficiency]\label{thm:efficiency}
+The exact conditional MLE is regular and asymptotically efficient for the LAN experiment of Theorem~\ref{thm:LAN}.  In particular:
+\begin{enumerate}[label=(\roman*)]
+ \item it attains the inverse-information covariance $J(\vzero)^{-1}$;
+ \item every regular estimator has a local asymptotic convolution limit equal to the Gaussian law in \eqref{eq:MLE-limit} convolved with an independent residual law;
+ \item for every bounded bowl-shaped loss, the MLE attains the local asymptotic minimax lower bound.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+The LAN expansion identifies the limiting Gaussian shift experiment.  Equation \eqref{eq:linear-MLE} shows that the MLE has the efficient influence $J^{-1}\Delta$.  The convolution and local minimax conclusions are the standard decision-theoretic consequences of LAN for regular estimators.
+\end{proof}
+
+\section{Polynomial likelihood tails and moment convergence}
+
+\begin{theorem}[Polynomial-type likelihood-ratio bound]\label{thm:PLDI}
+Assume the conditions of Theorem~\ref{thm:LAN}.  For every $L>0$, there exists $C_L<\infty$ such that, for all $r\ge1$ and all sufficiently large $(N,n)$,
+\begin{equation}\label{eq:PLDI}
+ \Pp_{\vzero}\left(
+ \left\|\An(\widehat\vartheta_{N,n}-\vzero)\right\|>r
+ \right)
+ \le C_Lr^{-L}.
+\end{equation}
+Consequently, for every $p>0$,
+\begin{equation}\label{eq:uniform-moments}
+ \sup_{N,n}
+ \E_{\vzero}\left[
+ \left\|\An(\widehat\vartheta_{N,n}-\vzero)\right\|^p
+ \right]<\infty,
+\end{equation}
+where finitely many initial indices may be absorbed into the constant.
+\end{theorem}
+
+\begin{proof}[Proof structure]
+Split the likelihood-ratio field into a local region and its complement.  On the local region, Lemma~\ref{lem:remainder} gives a uniformly quadratic field with positive-definite limit curvature; the normalised score has moments of every order because it is a finite sum of Gaussian chaoses.  Outside the local region, Lemma~\ref{lem:KL} gives deterministic loss of order $r^2$ on the information scale, while martingale concentration controls the centred field.  Applying the polynomial-type large-deviation argument to successive annuli yields \eqref{eq:PLDI}.  Tail integration gives \eqref{eq:uniform-moments}.
+\end{proof}
+
+\begin{theorem}[Polynomial moment convergence]\label{thm:moment-convergence}
+Let $f:\R^2\to\R$ be continuous and satisfy
+\[
+ |f(x)|\le C(1+\|x\|^p)
+\]
+for some finite $C,p$.  Then
+\begin{equation}\label{eq:moment-convergence}
+ \E_{\vzero}\left[
+ f\!\left(\An(\widehat\vartheta_{N,n}-\vzero)\right)
+ \right]
+ \longrightarrow
+ \E\left[f\!\left(J(\vzero)^{-1/2}Z\right)\right],
+ \qquad Z\sim\mathcal N_2(0,I_2).
+\end{equation}
+In particular, all polynomial moments of the normalised MLE converge to the corresponding Gaussian moments.
+\end{theorem}
+
+\begin{proof}
+Weak convergence follows from Theorem~\ref{thm:MLE-CLT}.  The polynomial tail bound in Theorem~\ref{thm:PLDI} gives uniform integrability of every required order.  Truncation and dominated convergence then yield \eqref{eq:moment-convergence}.
+\end{proof}
+
+\section{Heat-equation corollary}
+
+\begin{corollary}[One-dimensional Dirichlet heat equation]\label{cor:heat}
+Let $D=(0,1)$, $A_0=\Delta$ with Dirichlet boundary conditions, and
+\[
+ \lambda_k=\pi^2k^2.
+\]
+Then
+\[
+ \LamN
+ =\pi^2\frac{N(N+1)(2N+1)}6
+ \sim\frac{\pi^2}{3}N^3.
+\]
+The joint regime becomes
+\begin{equation}\label{eq:heat-regime}
+ \frac{N^2}{n}\longrightarrow0.
+\end{equation}
+Under the remaining assumptions,
+\begin{align}
+ N^{3/2}(\widehat\theta_{N,n}-\theta_0)
+ &\Rightarrow
+ \mathcal N\!\left(0,\frac{6\theta_0}{\pi^2T}\right),\label{eq:heat-theta}\\
+ \sqrt{Nn}(\widehat\sigma_{N,n}-\sigma_0)
+ &\Rightarrow
+ \mathcal N\!\left(0,\frac{\sigma_0^2}{2}\right).
+ \label{eq:heat-sigma}
+\end{align}
+\end{corollary}
+
+\paragraph{Burden of the sampling condition.}
+For the heat equation, the fastest observed mode relaxes on time scale $N^{-2}$.  Condition \eqref{eq:heat-regime} requires the temporal mesh to be asymptotically finer than that scale.  It is precisely what separates the drift and scale scores and recovers the continuous-time drift information while retaining a regular discrete experiment for $\sigma$.
+
+\section{Interface with counterfactual inference}
+
+Work Package~2 showed that, for a fixed intervention $do(\theta=\widetilde\theta)$,
+\[
+ \Psi_w(U^{\widetilde\theta})
+ \sim\mathcal N(m_{\widetilde\theta,w},\sigma^2V^0_{\widetilde\theta,w}),
+\]
+so the factual parameter enters the target only through $\sigma$.  Let
+\[
+ a_{\widetilde\theta,w,z}
+ :=\frac{z-m_{\widetilde\theta,w}}
+ {\sigma_0\sqrt{V^0_{\widetilde\theta,w}}},
+ \qquad V^0_{\widetilde\theta,w}>0.
+\]
+
+\begin{corollary}[Pointwise fixed-intervention plug-in limit]\label{cor:cf-pointwise}
+For a fixed non-degenerate target,
+\begin{equation}\label{eq:cf-pointwise}
+ \sqrt{Nn}\left\{
+ F_{\widetilde\theta,w}(z;\widehat\vartheta_{N,n})
+ -F_{\widetilde\theta,w}(z;\vzero)
+ \right\}
+ \Rightarrow
+ \mathcal N\!\left(
+ 0,\frac12\phi(a_{\widetilde\theta,w,z})^2
+ a_{\widetilde\theta,w,z}^2
+ \right).
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+The derivative with respect to $\theta$ is zero, while
+\[
+ \partial_\sigma F
+ =-\frac{a}{\sigma_0}\phi(a).
+\]
+Apply the scalar delta method to the second coordinate of \eqref{eq:MLE-limit}.
+\end{proof}
+
+\begin{remark}[Required correction to WP4]
+There is no universal scalar normalisation for every target.  Fixed-intervention laws are $\sigma$-only targets and have rate $\sqrt{Nn}$.  Factual laws and factual-versus-counterfactual distributional effects generally have a non-zero $\theta$ derivative and therefore inherit the slower rate $\sqrt{\LamN}$; at that rate, the $\sigma$ estimation error vanishes because $\LamN/(Nn)\to0$.  The uniform empirical-process theorem must therefore be written either with the matrix normalisation $\An$, or as two rate-stratified process theorems.
+\end{remark}
+
+\section{Monte Carlo verification}
+
+A reproducible script, \texttt{wp3\_monte\_carlo.py}, simulates exact OU transitions, stores only the sufficient statistics
+\[
+ \sum_jY_{k,j}^2,
+ \qquad
+ \sum_jY_{k,j}Y_{k,j+1},
+ \qquad
+ \sum_jY_{k,j+1}^2,
+\]
+and computes the exact profile MLE.  The design uses $\lambda_k=k^2$, $u_0=0$, $\theta_0=0.7$, $\sigma_0=0.8$, $T=1$, and $n=25N^2$, so $\lambda_N\Delta_n=0.04$.  Across 500 replications, the standard deviations of the normalised errors approach the LAN predictions
+\[
+ \sqrt{2\theta_0/T}=1.1832,
+ \qquad
+ \sigma_0/\sqrt2=0.5657.
+\]
+
+\begin{center}
+\begin{tabular}{rrrrrrr}
+\toprule
+$N$ & $n$ & $\lambda_N\Delta_n$ & $\operatorname{sd}(Z_\theta)$ & theory & $\operatorname{sd}(Z_\sigma)$ & theory\\
+\midrule
+4  & 400  & 0.04 & 1.340 & 1.183 & 0.553 & 0.566\\
+6  & 900  & 0.04 & 1.237 & 1.183 & 0.545 & 0.566\\
+8  & 1600 & 0.04 & 1.232 & 1.183 & 0.567 & 0.566\\
+10 & 2500 & 0.04 & 1.217 & 1.183 & 0.560 & 0.566\\
+\bottomrule
+\end{tabular}
+\end{center}
+Here $Z_\theta=\sqrt{\LamN}(\widehat\theta-\theta_0)$ and
+$Z_\sigma=\sqrt{Nn}(\widehat\sigma-\sigma_0)$.  The remaining finite-$N$ upward dispersion of the drift estimator is consistent with the substantially slower spectral-information accumulation.
+
+\section{Assumption and failure audit}
+
+\renewcommand{\arraystretch}{1.18}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.24\textwidth} X X}
+\toprule
+Assumption & Role in the theorem & Failure when removed\\
+\midrule
+Known diagonal $A_0,Q$ and exact spectral modes & Makes the transition law explicit and links all modes to common $(\theta,\sigma)$ & Unknown modal amplitudes or basis require a larger nuisance experiment\\
+$q_k>0$ on observed modes & Gives a non-degenerate innovation density & Deterministic observed modes contribute only decay information\\
+$\lambda_N/\LamN\to0$ & Lindeberg/no-dominating-mode condition & One mode can dominate and prevent the Gaussian spectral aggregation\\
+$\lambda_N\Delta_n\to0$ & Resolves the fastest observed relaxation and diagonalises information & Drift--scale cross-information need not vanish; limiting rates and covariance change\\
+$R_N=o(\LamN)$ & Removes leading deterministic-start information & A non-negligible known start changes, but does not invalidate, the drift-information constant\\
+Compact interior parameter & Uniform smoothness, global separation, inactive boundary & Boundary limits are non-regular and require separate theory\\
+Exact transition likelihood & Eliminates discretisation bias & Euler likelihood may require stronger root-information undersmoothing\\
+Increasing $N$ & Supplies diverging fixed-horizon drift information & With fixed $N$ and fixed $T$, high-frequency sampling alone does not consistently estimate drift\\
+\bottomrule
+\end{tabularx}
+
+\section{WP3 completion statement}
+
+The statistical experiment is now explicit.  Proposition~\ref{prop:profile} supplies a computable exact MLE; Proposition~\ref{prop:exact-info} gives the finite-sample information matrix; Theorems~\ref{thm:info-limit} and \ref{thm:LAN} establish the justified mixed-rate LAN experiment; Theorems~\ref{thm:consistency}, \ref{thm:MLE-CLT}, and \ref{thm:efficiency} prove consistency, asymptotic normality, and efficiency; and Theorems~\ref{thm:PLDI}--\ref{thm:moment-convergence} close the polynomial-loss requirement.  The stronger temporal condition $\lambda_N^2\Delta_n\to0$ is not part of the exact-likelihood theorem.  It would arise only from particular approximate-score or Euler constructions.
+
+\section*{Literature position}
+
+The spectral large-$N$ approach and continuous-observation MLE theory for parabolic SPDEs are established in the classical work of Huebner and Rozovskii and in the modern SPDE-statistics literature.  LAN, efficiency, and polynomial-loss equivalence have also been developed for diagonalizable SPDE experiments under continuous spectral observation.  Discrete-observation SPDE work has primarily used power variations, physical-space grids, or approximate contrasts.  The contribution of this work package is the exact joint discrete spectral experiment for the additive diagonal core, including the full two-parameter information matrix, its mixed rates, the resolution condition yielding asymptotic orthogonality, and the rate consequence for operator-intervention targets.  Polynomial-type likelihood control follows the general quasi-likelihood random-field methodology, specialised here to an explicit Gaussian Markov experiment.
+
+\begin{thebibliography}{99}
+
+\bibitem{Cialenco2018}
+I.~Cialenco,
+``Statistical inference for SPDEs: an overview'',
+\emph{Statistical Inference for Stochastic Processes}, 21 (2018), 309--329.
+
+\bibitem{CialencoHuang2020}
+I.~Cialenco and Y.~Huang,
+``A note on parameter estimation for discretely sampled SPDEs'',
+\emph{Stochastics and Dynamics}, 20(3) (2020), 2050016.
+
+\bibitem{ChengCialencoGong2019}
+Z.~Cheng, I.~Cialenco, and R.~Gong,
+``Bayesian estimations for diagonalizable bilinear SPDEs'',
+preprint arXiv:1805.11747, 2019.
+
+\bibitem{HildebrandtTrabs2021}
+F.~Hildebrandt and M.~Trabs,
+``Parameter estimation for SPDEs based on discrete observations in time and space'',
+\emph{Electronic Journal of Statistics}, 15 (2021), 2716--2776.
+
+\bibitem{HuebnerRozovskii1995}
+M.~Huebner and B.~L. Rozovskii,
+``On asymptotic properties of maximum likelihood estimators for parabolic stochastic PDEs'',
+\emph{Probability Theory and Related Fields}, 103 (1995), 143--163.
+
+\bibitem{IbragimovHasminskii1981}
+I.~A. Ibragimov and R.~Z. Has'minskii,
+\emph{Statistical Estimation: Asymptotic Theory},
+Springer, 1981.
+
+\bibitem{Yoshida2011}
+N.~Yoshida,
+``Polynomial type large deviation inequalities and quasi-likelihood analysis for stochastic differential equations'',
+\emph{Annals of the Institute of Statistical Mathematics}, 63 (2011), 431--479.
+
+\bibitem{Yoshida2021}
+N.~Yoshida,
+``Simplified quasi-likelihood analysis for a locally asymptotically quadratic random field'',
+preprint arXiv:2102.12460, 2021.
+
+\end{thebibliography}
+
+\end{document}

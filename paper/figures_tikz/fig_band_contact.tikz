@@ -1,0 +1,46 @@
+% Schematic: floor-studentised simultaneous band and estimated contact set.
+% Effect surface tau -> Delta(tau) (one-sided null Delta <= 0), band of
+% half-width c* s_kappa / r, floor active near the derivative zero, and the
+% estimated contact set where the studentised surface exceeds -eta_{N,n}.
+\begin{tikzpicture}[font=\small, scale=1.0,
+  ax/.style={-{Stealth[length=2.2mm]}, thick},
+  lbl/.style={font=\footnotesize\itshape, text=black!70}]
+% effect curve Delta(tau) = -(tau-3)^2/6 + 0 : contact at tau=3
+\pgfmathsetmacro{\shift}{2.2}
+\draw[ax] (0,\shift) -- (8.6,\shift) node[below left=1pt]{$\tau$};
+\draw[ax] (0,0) -- (0,4.4);
+\node[anchor=south, rotate=90] at (-.6,2.2) {$\widehat\Delta(\tau)$, band};
+
+% band (drawn first, behind): half-width h(tau) = .30 + .22*exp(-((tau-3)^2))  floor bump near zero-derivative point tau=3?
+% use s(tau) ~ |tau-3|/3 studentiser with floor kappa: h = max(.14, .38*|tau-3|/3) + .12
+\fill[blue!10]
+  plot[domain=0.3:8.2, samples=80]
+    (\x,{\shift-((\x-3)^2)/6 + max(0.16,0.36*abs(\x-3)/3)+0.10})
+  -- plot[domain=8.2:0.3, samples=80]
+    (\x,{\shift-((\x-3)^2)/6 - max(0.16,0.36*abs(\x-3)/3)-0.10});
+% true effect
+\draw[thick, black!70, dashed] plot[domain=0.3:8.2, samples=80]
+  (\x,{\shift-((\x-3)^2)/6});
+% estimate (slightly wiggly)
+\draw[thick, blue!60!black] plot[domain=0.3:8.2, samples=90]
+  (\x,{\shift-((\x-3)^2)/6+0.09*sin(160*\x)});
+% zero line
+\draw[black!50] (0,\shift) -- (8.6,\shift);
+\node[font=\scriptsize, black!50, anchor=west] at (8.15,\shift+0.16) {$0$};
+
+% floor-active region: where .36|tau-3|/3 < .16  => |tau-3| < 1.333
+\draw[decorate, decoration={brace, mirror, amplitude=4pt}, black!60]
+  (1.667,0.28) -- (4.333,0.28)
+  node[midway, below=5pt, lbl]{floor active: $\widehat s<\kappa_{N,n}\norm{\widehat s}_\infty$};
+% contact set (true): tau = 3
+\fill[red!70!black] (3,\shift) circle (2pt);
+\node[lbl, red!70!black, above right=1pt and 2pt] at (3,\shift) {$\cC_0$};
+% estimated contact set: where r Delta / s_kappa >= -eta: interval around 3
+\draw[very thick, red!60!black] (2.05,0.72) -- (3.95,0.72)
+  node[midway, below=2pt, lbl, red!60!black]
+  {$\widehat{\cC}_{N,n}$ (shrinks to $\cC_0$ at rate driven by $\eta_{N,n}/r$)};
+% band label
+\node[lbl, blue!50!black, align=left] at (6.7,3.75)
+  {simultaneous band\\ $\widehat T\pm c^*_{1-\alpha}\widehat s_\kappa/r$};
+\draw[-{Stealth[length=2mm]}, black!50] (6.05,3.55) -- (5.35,3.05);
+\end{tikzpicture}

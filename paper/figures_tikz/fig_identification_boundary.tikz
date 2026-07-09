@@ -1,0 +1,36 @@
+\begin{tikzpicture}[font=\small]
+\matrix (m) [matrix of nodes,
+  nodes={minimum height=.62cm, anchor=center},
+  column 1/.style={nodes={align=left, anchor=west, font=\small, text width=5.6cm}},
+  column 2/.style={nodes={text width=1.7cm, align=center}},
+  column 3/.style={nodes={text width=2.3cm, align=center}},
+  column 4/.style={nodes={text width=2.1cm, align=center}},
+  column 5/.style={nodes={text width=2.1cm, align=center}},
+  row 1/.style={nodes={font=\footnotesize\bfseries, align=center}},
+  row sep=1pt, column sep=4pt]
+{
+ |[font=\footnotesize\bfseries, align=left]| freed module (nuisance class) & factual law & fixed-interv.\ marginal $F_{a,w}$ & distributional effect $\Delta_{a,w,z}$ & unit-level contrast \\
+ baseline: all modules invariant (Ass.~2.1, \S4) & \yes & \yes & \yes & \yes$^{\dagger}$ \\
+ state-feedback forcing $G+L\,\cdot$ (gauge, Thm~8.1) & \yes & \no & \no & \no \\
+ open-loop forcing law (ex-ante $Z$) & \yes & \no & \no & \no \\
+ initial law free, finite observation & \yes & \no & \no & \no \\
+ rank-deficient sensing, free latent direction & \yes & \no & \no & \no \\
+ rank-deficient sensing, known cross-mode link & \yes & \yes & \yes & \yes$^{\dagger}$ \\
+ unknown calibration $c$ (sensor $Y=c\,U$) & \yes & \half & \half & \no \\
+ intervention-dependent measurement & \yes & \no & \no & \no \\
+ cross-world coupling free & \yes & \yes & \yes & \no \\
+};
+% header rule and separators
+\draw[black!60, thick] (m-1-1.south west) -- (m-1-5.south east);
+\draw[black!25] (m-2-1.south west) -- (m-2-5.south east);
+\draw[black!25] (m-1-1.north east) -- (m-10-1.south east);
+
+% notes
+\node[anchor=north west, align=left, font=\footnotesize, text=black!70, text width=14.2cm]
+  at ($(m-10-1.south west)+(0,-0.25)$)
+  {\half\ target-specific: field-scale targets fail, sensor-scale targets remain identified (Thm~8.2(v)).\quad
+   $^{\dagger}$ unit-level contrasts additionally require the cross-world coupling convention (shared Wiener path, \S3);
+   marginals never do.\\
+   Reading: each row frees one module of the SCM while preserving observational equivalence of the factual law
+   (column 1 always \yes); columns record which post-intervention targets survive (\S4, Thm~8.1--8.2).};
+\end{tikzpicture}

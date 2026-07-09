@@ -1,0 +1,125 @@
+\section{Operator sensitivity and total approximation error}\label{sec:sensitivity}
+
+The operator derivative must distinguish bounded perturbations from the paper's unbounded scalar-rescaling direction.
+
+Let $A$ generate a $C_0$-semigroup $S(t)$ and let $B\in\mathcal L(H)$. The bounded perturbation theorem \citep{EngelNagel2000,Pazy1983} gives
+\[
+ D_BS(t)=\int_0^tS(t-s)BS(s)\,ds.
+\]
+
+\begin{theorem}[Operator-to-law differentiability]\label{thm:sensitivity}
+For bounded $B$, the map $A\mapsto U^A$ is Fr\'echet differentiable in
+\[
+ L^2(\Omega;L^2(0,T;H)).
+\]
+The derivative is
+\[
+ \dot U_t[B]
+ =D_BS(t)u_0
+ +\sigma\int_0^tD_BS(t-r)Q^{1/2}dW_r
+ =\int_0^tS(t-s)BU_s\,ds.
+\]
+For the Gaussian target,
+\[
+ D_AF_{A,w}(z)[B]
+ =\phi(c)
+ \left[
+ -\frac{D_Am_A(w)[B]}{\sqrt{v_A(w)}}
+ -\frac{z-m_A(w)}{2v_A(w)^{3/2}}D_Av_A(w)[B]
+ \right],
+\]
+with a uniform quadratic remainder on bounded target classes. Moreover,
+\[
+ W_2\left(
+ \Law(\Psi_w(U^{A+\varepsilon B})),
+ \Law(\Psi_w(U^A))
+ \right)
+ \le C|\varepsilon|\norm{B}\norm{w}_{L^2}.
+\]
+\end{theorem}
+
+The primary intervention uses $A_a=aA_0$, whose direction $A_0$ is unbounded. Analytic-semigroup calculus instead gives
+\[
+ \partial_a e^{taA_0}=tA_0e^{taA_0},
+ \qquad
+ \partial_a^2e^{taA_0}=t^2A_0^2e^{taA_0},
+\]
+with operator-norm remainder bounds uniform for $a$ in compact positive intervals.
+
+We next combine the inferential and numerical layers. Assume
+\[
+ q_k^2\lesssim\lambda_k^{-\beta},
+ \qquad
+ u_0\in D((-A_0)^{r_0/2}),
+\]
+and let the weight ellipsoid have spatial smoothness $s$. Define
+\[
+ \mu_m=\frac{r_0+1+2s}{2},
+ \qquad
+ \mu_V=\beta+2+2s.
+\]
+Then
+\[
+ \sup_{a,w}\abs{m_a(w)-m_{a,K}(w)}
+ \lesssim\lambda_{K+1}^{-\mu_m},
+\]
+and
+\[
+ \sup_{a,w}\abs{V_a(w)-V_{a,K}(w)}
+ \lesssim\lambda_{K+1}^{-\mu_V}.
+\]
+Under a uniform positive variance lower bound, Gaussian law errors depend linearly on the variance tail, not on its square root. Under Weyl growth the exponent of \eqref{eq:rhoF} below follows in two lines: the Gaussian-law error is Lipschitz in $(m,V)$ under the variance floor, so the uniform CDF error is at most $C(\lambda_{K+1}^{-\mu_m}+\lambda_{K+1}^{-\mu_V})$; inserting $\lambda_{K+1}\asymp K^{2/d}$ turns the spectral exponents $(\mu_m,\mu_V)$ into the truncation exponents $(2\mu_m/d,\,2\mu_V/d)$, of which the smaller one binds:
+\begin{equation}\label{eq:rhoF}
+ \rho_F
+ =\min\left\{
+ \frac{2\mu_m}{d},\frac{2\mu_V}{d}
+ \right\}
+ =\min\left\{
+ \frac{r_0+1+2s}{d},
+ \frac{2(\beta+2+2s)}{d}
+ \right\}.
+\end{equation}
+
+Let $\delta$ be the functional quadrature step and let $\eta_M$ bound a bounded operator approximation. Let $\kappa$ be the proven temporal exponent for the declared implementation.
+
+\begin{theorem}[Full statistical--numerical error]\label{thm:total-error}
+For a target family $f$ with statistical rate
+\[
+ R_f=
+ \begin{cases}
+ \sqrt{Nn},&\text{fixed-intervention targets},\\
+ \sqrt{\Lambda_N},&\text{factual and effect targets},
+ \end{cases}
+\]
+the implemented estimator satisfies
+\[
+ \norm{\widehat T_f^{K,\delta,M}-T_{f,0}}_\infty
+ =\Op(R_f^{-1})
+ +O\left(K^{-\rho_F}+\delta^\kappa+\eta_M\right).
+\]
+More precisely,
+\[
+ R_f(\widehat T_f^{K,\delta,M}-T_{f,0})
+ =\mathbb G_f+R_fb_{f,K,\delta,M}+o_{\Pp}(1).
+\]
+Thus ordinary bands remain valid under
+\[
+ R_f\left(K^{-\rho_F}+\delta^\kappa+\eta_M\right)\to0.
+\]
+A certified deterministic approximation bound can instead be added to the statistical half-width. A first-order operator-response correction replaces $\eta_M$ by $\eta_M^2$.
+\end{theorem}
+
+\begin{figure}[t]
+\centering
+\resizebox{.95\textwidth}{!}{\input{figures_tikz/fig_error_budget.tikz}}
+\caption{The error budget of \Cref{thm:total-error} at the inferential scale: statistical error at the family rate $R_f$, three numerical error sources, and the resulting bias trichotomy with the balanced allocation rule.}
+\label{fig:budget}
+\end{figure}
+
+The theorem distinguishes an unshifted regime, a local-bias regime with a shifted Gaussian process, and a dominant-bias regime in which naive inference fails. Balanced computation uses
+\[
+ K\asymp R_f^{1/\rho_F},
+ \qquad
+ \delta\asymp R_f^{-1/\kappa},
+\]
+with a slowly diverging factor for strict undersmoothing.

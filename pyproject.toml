@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "causal-spdes"
+version = "0.1.0"
+description = "Operator interventions and uniform counterfactual inference for linear SPDEs"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Gabriel Lucas Stephane Bontemps"}]
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "matplotlib>=3.8",
+  "pandas>=2.1",
+  "pyyaml>=6.0"
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools]
+package-dir = {"" = "replication/python"}
+
+[tool.setuptools.packages.find]
+where = ["replication/python"]
+
+[tool.pytest.ini_options]
+testpaths = ["replication/python/tests"]
+addopts = "-q"

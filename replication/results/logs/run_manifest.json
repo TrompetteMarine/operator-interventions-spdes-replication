@@ -1,0 +1,22 @@
+{
+  "profile": "standard",
+  "elapsed_seconds": 7.06839656829834,
+  "config": {
+    "theta": 0.7,
+    "sigma": 0.8,
+    "horizon": 1.0,
+    "beta": 0.75,
+    "seed": 20260707,
+    "reps": 250,
+    "designs": [
+      [
+        5,
+        2000
+      ],
+      [
+        10,
+        8000
+      ]
+    ]
+  }
+}

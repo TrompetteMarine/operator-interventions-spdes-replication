@@ -1,0 +1,26 @@
+\section{Proofs of the impossibility constructions}
+
+For the gauge theorem, the total factual drifts are identical. Pathwise uniqueness gives factual equality. After intervention, the total drifts differ by $Lu$.
+
+In the rank-one construction $L=\gamma P_\ell$, the target mode is an OU process with post-intervention rates $r_1$ and $r_2$. The integrated OU variance can be written as
+\[
+ \sigma^2q_\ell^2\int_0^T
+ \left(\int_s^Te^{-r(t-s)}dt\right)^2ds.
+\]
+The inner integral is strictly decreasing in $r$, so the target variances differ.
+
+For the open-loop path construction, direct substitution proves $X_t=Zh(t)$. Variation of constants under the common intervention and integration by parts give the separated formula.
+
+For a finite grid, the forcing matrix $L_a$ is lower triangular with strictly positive diagonal
+\[
+ \frac{1-e^{-a\Delta_j}}a.
+\]
+It is invertible. Choosing $K_a=L_a^{-1}(C-C_a^W)L_a^{-\top}$ makes the factual covariance exactly $C$. The post-intervention covariance difference is affine in the scalar level $M$ when $C=MI$. Its slope is non-zero because $L_{a_1}L_{a_1}^\top\ne L_{a_2}L_{a_2}^\top$. It can therefore vanish for at most one $M$.
+
+For unknown calibration, the sensor process solves
+\[
+ dY_t=-\theta Y_tdt+(c\sigma)dW_t.
+\]
+Its path law depends on $c\sigma$. The latent field law depends on $\sigma$ separately. The distinction between field-scale and sensor-scale targets follows immediately.
+
+For cross-world coupling, any correlation $\rho\in[-1,1]$ is compatible with fixed Gaussian marginals, while the contrast variance changes with $\rho$.

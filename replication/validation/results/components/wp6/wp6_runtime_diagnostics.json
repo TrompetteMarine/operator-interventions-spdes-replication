@@ -1,0 +1,20 @@
+{
+  "elapsed_seconds": 0.8038079820007624,
+  "python": "3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0]",
+  "platform": "Linux-4.4.0-x86_64-with-glibc2.41",
+  "numpy": "2.3.5",
+  "pandas": "2.2.3",
+  "scipy": "1.17.0",
+  "dimension": 6,
+  "horizon": 1.5,
+  "sigma": 0.7,
+  "threshold": 0.5085792423566163,
+  "baseline_mean": 0.4280983683587907,
+  "baseline_variance": 0.07196856754948767,
+  "analytic_mean_derivative": 0.005315479963359402,
+  "analytic_variance_derivative": 0.005865315172272523,
+  "analytic_cdf_derivative": -0.012219167195500974,
+  "operator_norm_B": 0.4500266932765221,
+  "stability_margin": 0.9842392505868718,
+  "common_noise_lipschitz_constant": 0.1826285151599603
+}

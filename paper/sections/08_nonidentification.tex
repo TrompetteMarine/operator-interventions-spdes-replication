@@ -1,0 +1,72 @@
+\section{Sharp non-identification boundaries}\label{sec:nonid}
+
+The positive results rely on structural invariance, not merely analytic regularity. We now show what fails when key modules are unrestricted.
+
+Let a general mechanism have drift
+\[
+ AU_t+G(t,U_t).
+\]
+For bounded $L$, define
+\[
+ \mathcal T_L(A,G)=(A-L,G+L\,\cdot).
+\]
+
+\begin{theorem}[Operator--forcing gauge]\label{thm:gauge-main}
+The mechanisms $(A,G)$ and $(A-L,G+L\,\cdot)$ generate the same factual stochastic evolution equation and hence the same factual path under common exogenous noise. Under a common operator intervention $A\mapsto\widetilde A$, their post-intervention drifts differ by $Lu$. Unless the selected target annihilates this direction, the post-intervention laws differ.
+\end{theorem}
+
+This is not merely an adapted-feedback pathology. Let $a_1\ne a_2$, let $h(0)=0$, and define an open-loop input
+\[
+ F_i(t)=Z(h'(t)+a_ih(t)),
+\]
+where $Z$ is generated ex ante. Both equations
+\[
+ dX_t=-a_iX_tdt+F_i(t)dt
+\]
+have the same complete factual path $X_t=Zh(t)$. After a common intervention to $\widetilde a$,
+\[
+ X_t^{i,do}
+ =Z\left[
+ h(t)+(a_i-\widetilde a)\int_0^te^{-\widetilde a(t-s)}h(s)ds
+ \right],
+\]
+so the target laws separate.
+
+A positive-noise construction works on every finite observation grid. With a piecewise-constant Gaussian input, the observed vector is
+\[
+ Y=L_aZ+\varepsilon_a.
+\]
+For a common covariance $C$, choosing
+\[
+ K_a=L_a^{-1}(C-C_a^W)L_a^{-\top}
+\]
+produces the same factual $N(0,C)$ law under distinct operators, while a common post-intervention operator generally produces different covariance matrices.
+
+\begin{theorem}[Sharp boundary assembly]\label{thm:nonid-assembly}
+Each of the following enlarged model classes contains observationally equivalent factual mechanisms with different post-intervention target laws:
+\begin{enumerate}[label=(\roman*)]
+\item unrestricted bounded state-feedback forcing;
+\item unrestricted open-loop forcing law, even when independent of the Wiener noise;
+\item unknown random initial law under finite observation;
+\item rank-deficient sensing with a free target-relevant latent direction;
+\item unknown calibration for field-scale targets;
+\item intervention-dependent measurement;
+\item non-identified state and measurement noise decomposition.
+\end{enumerate}
+Furthermore, identified marginal counterfactual laws do not identify a unit-level contrast without a cross-world coupling convention.
+\end{theorem}
+
+\begin{figure}[t]
+\centering
+\resizebox{.98\textwidth}{!}{\input{figures_tikz/fig_identification_boundary.tikz}}
+\caption{Identification boundary map. Each row frees one structural module while preserving observational equivalence of the factual law; columns record which post-intervention targets survive (\Cref{thm:gauge-main,thm:nonid-assembly}).}
+\label{fig:boundary}
+\end{figure}
+
+The qualifications are target specific. Unknown calibration can leave sensor-scale counterfactuals identified while field-scale targets fail. Partial sensing can be harmless when known cross-mode structure links latent and observed directions. Marginal CDF and quantile effects do not require identification of cross-world correlation.
+
+The shared-Wiener construction of \Cref{sec:semantics} selects a structural coupling for unit-level contrasts. Other couplings can preserve the same marginals and change
+\[
+ \Var(X^a-X^b)=v_a+v_b-2\rho\sqrt{v_av_b}.
+\]
+This limits individual-effect claims but does not weaken the marginal distribution results.

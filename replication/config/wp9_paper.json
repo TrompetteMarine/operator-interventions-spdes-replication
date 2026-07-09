@@ -1,0 +1,49 @@
+{
+  "seed": 20260707,
+  "canonical": {
+    "theta0": 0.15,
+    "sigma0": 0.30,
+    "theta_intervention": 0.05,
+    "horizon": 1.0,
+    "alpha_q": 0.75,
+    "weight_exponent": 0.8,
+    "initial_exponent": 0.8
+  },
+  "planned_grid_audit": {
+    "N": [5, 10, 20, 50, 100],
+    "n": [100, 250, 500, 1000, 2000]
+  },
+  "theorem_aligned_designs": [
+    {"N": 5, "n": 2000, "reps": 1000},
+    {"N": 10, "n": 8000, "reps": 1000},
+    {"N": 20, "n": 32000, "reps": 1000}
+  ],
+  "alpha_sensitivity": {
+    "N": 10,
+    "n": 8000,
+    "reps": 400,
+    "values": [0.0, 0.75, 1.5]
+  },
+  "counterfactual": {
+    "target_modes": 10,
+    "intervention_grid": [0.05, 0.10, 0.15],
+    "standardised_thresholds": [-2.0, -1.0, -0.5, 0.0, 0.5, 1.0, 2.0],
+    "quantile_levels": [0.05, 0.50, 0.90, 0.95, 0.99]
+  },
+  "bootstrap_sensitivity": {
+    "source_design_N": 10,
+    "reps": 300,
+    "draw_counts": [199, 499, 999],
+    "grid_sizes": [11, 31, 61],
+    "methods": ["direct_gaussian", "mode_gaussian", "mode_rademacher"]
+  },
+  "galerkin": {
+    "alpha_q_values": [0.0, 0.75, 1.5],
+    "K_values": [2, 5, 10, 20, 50, 100, 200, 400],
+    "reference_K": 500000
+  },
+  "temporal": {
+    "J_values": [100, 250, 500, 1000, 2000],
+    "K": 10
+  }
+}
