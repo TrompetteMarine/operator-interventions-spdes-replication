@@ -20,7 +20,7 @@ constructions.
 
 ```
 paper/            LaTeX sources (single-document manuscript)
-  paper_merged.tex        master (draft build: verification flags visible)
+  paper_merged.tex        master
   build_supplement.py     assembles the proofs section from part sources
   sections/ closures/ figures*/ wp_src/   content
   pdf/                    compiled PDFs (draft + submission)
@@ -29,8 +29,20 @@ replication/
   config/         deterministic simulation profiles (seeded)
   validation/     end-to-end validation pipeline (generates paper figures)
   results/        generated tables, figures, logs, manifests
-  scripts/        additional experiment sweeps
+  scripts/        additional experiment sweeps (incl. regime_scan.py)
+formalization/    Lean 4 / Mathlib formalization archive and audit reports
+  RequestProject/ machine-checked finite-dimensional cores of the proofs
+  *_AUDIT.md      audit reports mapping Lean declarations to the paper's
+                  numbered statements (basis of the v3 proof corrections;
+                  see paper/CHANGES_AUDIT_v3.md)
+  FORMALISATION_STATUS.md  component-level status table
+                  (KERNEL_CHECKED / PARTIALLY_FORMALISED / PAPER_PROOF_ONLY /
+                   EXTERNAL_THEOREM / NUMERICALLY_TESTED)
 ```
+
+`paper/theorem_registry.md` is the single source of truth for statement
+signatures: model namespace, hypotheses, proof location, Lean components,
+and status for every numbered main-text result.
 
 ## Build the paper
 
@@ -68,6 +80,26 @@ make sweeps              # additional experiment sweeps (results/sweeps)
 
 All randomness is seeded; runs write manifests (profile, versions, runtime,
 SHA-256 checksums) alongside outputs.
+
+The regime scan distinguishing asymptotically aligned designs
+(n/N^2 diverging) from fixed-resolution and deliberately under-resolved
+designs is run by
+
+```bash
+python3 replication/scripts/regime_scan.py   # writes results/tables/regime_scan.csv
+```
+
+## Check the formalization
+
+```bash
+cd formalization
+lake build    # requires the pinned Lean toolchain (lean-toolchain) + Mathlib
+```
+
+The audit reports in `formalization/` record which statements are
+machine-checked, the two corrections implemented in the manuscript
+(constrained profile MLE; explicit spectral-growth hypothesis), and the
+dependencies that remain classical imports (Part S0 of the paper).
 
 ## Licences
 
