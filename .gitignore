@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+paper/*
+paper/*.pdf
 paper/*.aux
 paper/*.log
 paper/*.out
@@ -8,7 +10,8 @@ paper/*.toc
 paper/*.bbl
 paper/*.blg
 paper/*.fls
-paper/*.fdb_latexmk
+paper/*.fdb_latexmks
 paper/*.synctex.gz
 .DS_Store
 .venv/
+formalization/*
